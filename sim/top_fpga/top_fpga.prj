@@ -2,6 +2,8 @@
 # MTM UEC2
 # Author: Piotr Kaczmarczyk
 #
+#Modified by: Pawel Zieba
+#
 # Description:
 # List of files defining the modules used during the test.
 # Specify the file paths relative to THIS file.
@@ -9,32 +11,32 @@
 # https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
 
 
-sv work ../../rtl/vga_pkg.sv \
-        ../../rtl/vga_timing.sv \
+sv work ../../rtl/vga/vga_pkg.sv \
+        ../../rtl/vga/vga_timing.sv \
         ../../rtl/draw_bg.sv \
-        ../../rtl/top_vga.sv \
-        ../../rtl/h_counter.sv \
-        ../../rtl/v_counter.sv \
-        ../../rtl/draw_rect.sv \
-        ../../rtl/draw_mouse.sv \
-        ../../rtl/draw_rect_ctl.sv \
-        ../../rtl/vga_if.sv \
-        ../../rtl/image_rom.sv \
-        ../../rtl/simple_clk_div.sv \
-        ../../rtl/draw_rect_char.sv \
-        ../../rtl/char_rom_16x16.sv \
-        ../../fpga/rtl/top_vga_basys3.sv \
+        ../../rtl/top_warships.sv \
+        ../../rtl/vga/h_counter.sv \
+        ../../rtl/vga/v_counter.sv \
+        ../../rtl/rect/draw_rect.sv \
+        ../../rtl/mouse/draw_mouse.sv \
+        ../../rtl/rect/draw_rect_ctl.sv \
+        ../../rtl/rect_char/draw_rect_char.sv \
+        ../../rtl/rect_char/char_rom_16x16.sv \
+        ../../rtl/vga/vga_if.sv \
+        ../../rtl/rect/image_rom.sv \
+        ../../rtl/common/simple_clk_div.sv \
         ../common/tiff_writer.sv \
-        top_fpga_tb.sv
+        top_fpga_tb.sv \
+        ../../fpga/rtl/top_warships_basys3.sv
 
-vhdl work ../../rtl/MouseCtl.vhd \
-        ../../rtl/Ps2Interface.vhd \
-        ../../rtl/MouseDisplay.vhd
+vhdl work ../../rtl/mouse/MouseCtl.vhd \
+        ../../rtl/mouse/Ps2Interface.vhd \
+        ../../rtl/mouse/MouseDisplay.vhd 
 
 # compile glbl module - required for IP simulation
 verilog work ../common/glbl.v \
                 ../../fpga/rtl/clk_wiz_0.v \
                 ../../fpga/rtl/clk_wiz_0_clk_wiz.v \
-                ../../rtl/font_rom.v \
-                ../../rtl/delay.v
+                ../../rtl/rect_char/font_rom.v \
+                ../../rtl/common/delay.v
 

@@ -58,7 +58,7 @@ end
  * Submodules instances
  */
 
-top_vga_basys3 dut (
+top_warships_basys3 dut (
     .clk(clk),
     .btnC(rst),
     .Vsync(vs),
