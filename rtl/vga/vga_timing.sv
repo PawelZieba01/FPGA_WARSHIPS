@@ -42,8 +42,5 @@ module vga_timing (
 
   assign out.rgb = 12'b0;
 
-  // Describe the actual circuit for the assignment.
-  // Video timing controller set for 800x600@60fps
-  // using a 40 MHz pixel clock per VESA spec.
 
 endmodule

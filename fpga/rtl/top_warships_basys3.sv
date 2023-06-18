@@ -37,8 +37,8 @@ module top_warships_basys3 (
 
 wire locked;
 wire clk_65MHz;
+wire clk_65MHz_mirror;
 wire clk_50MHz;
-//wire clk40MHz_mirror;
 
 (* KEEP = "TRUE" *)
 (* ASYNC_REG = "TRUE" *)
@@ -50,7 +50,7 @@ wire clk_50MHz;
  * Signals assignments
  */
 
-//assign JA1 = clk40MHz_mirror;
+assign JA1 = clk_65MHz_mirror;
 
 
 /**
@@ -64,15 +64,15 @@ wire clk_50MHz;
     .clk_50MHz(clk_50MHz)
  );
 
-//  ODDR pclk_oddr (
-//     .Q(clk40MHz_mirror),
-//     .C(clk40MHz),
-//     .CE(1'b1),
-//     .D1(1'b1),
-//     .D2(1'b0),
-//     .R(1'b0),
-//     .S(1'b0)
-// );
+ ODDR pclk_oddr (
+    .Q(clk_65MHz_mirror),
+    .C(clk_65MHz),
+    .CE(1'b1),
+    .D1(1'b1),
+    .D2(1'b0),
+    .R(1'b0),
+    .S(1'b0)
+);
 
 /**
  *  Project functional top module

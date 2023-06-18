@@ -29,8 +29,8 @@ module top_warships_tb;
  *  Local parameters
  */
 
-localparam VGA_CLK_PERIOD = 25;     // 40 MHz
-localparam PS2_CLK_PERIOD = 10;     // 100 MHz
+localparam VGA_CLK_PERIOD = 15.384;     // 65 MHz
+localparam PS2_CLK_PERIOD = 20;     // 50 MHz
 
 
 /**
@@ -64,7 +64,7 @@ end
 
 top_warships dut (
     .vga_clk,
-    .clk100MHz(ps2_clk),
+    .mouse_clk(ps2_clk),
     .rst(rst),
     .vs(vs),
     .hs(hs),
@@ -74,8 +74,8 @@ top_warships dut (
 );
 
 tiff_writer #(
-    .XDIM(16'd1056),
-    .YDIM(16'd628),
+    .XDIM(16'd1344),
+    .YDIM(16'd806),
     .FILE_DIR("../../results")
 ) u_tiff_writer (
     .clk(vga_clk),

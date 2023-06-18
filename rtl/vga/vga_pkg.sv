@@ -13,31 +13,33 @@
 package vga_pkg;
 
 // Parameters for VGA Display 800 x 600 @ 60fps using a 40 MHz clock;
-localparam HOR_PIXELS = 800;
-localparam VER_PIXELS = 600;
+localparam HOR_PIXELS = 1024;
+localparam VER_PIXELS = 768;
 
 // Add VGA timing parameters here and refer to them in other modules.
-localparam V_TOTAL_TIME = 628;
-localparam V_ADDR_TIME = 600;
-localparam V_BLANK_START = 600;
-localparam V_BLANK_TIME = 28;
-localparam V_SYNC_START = 601;
+localparam V_ADDR_TIME = VER_PIXELS;
+localparam V_FRONT_PORCH = 3;
+localparam V_BACK_PORCH = 29;
+localparam V_SYNC_TIME = 6;
 localparam V_BOTTOM_BORDER = 0;
 localparam V_RIGHT_BORDER = 0;
-localparam V_FRONT_PORCH = 1;
-localparam V_BACK_PORCH = 23;
-localparam V_SYNC_TIME = 4;
+localparam V_BLANK_TIME = V_FRONT_PORCH + V_BACK_PORCH + V_SYNC_TIME;
+localparam V_TOTAL_TIME = V_ADDR_TIME + V_BLANK_TIME;
+localparam V_BLANK_START = V_ADDR_TIME;
+localparam V_SYNC_START = V_ADDR_TIME + V_FRONT_PORCH;
 
-localparam H_TOTAL_TIME = 1056;
-localparam H_ADDR_TIME = 800;
-localparam H_BLANK_START = 800;
-localparam H_BLANK_TIME = 256;
-localparam H_SYNC_START = 840;
+localparam H_ADDR_TIME = HOR_PIXELS;
+localparam H_FRONT_PORCH = 24;
+localparam H_BACK_PORCH = 160;
+localparam H_SYNC_TIME = 136;
 localparam H_RIGHT_BORDER = 0;
 localparam H_LEFT_BORDER = 0;
-localparam H_FRONT_PORCH = 40;
-localparam H_BACK_PORCH = 88;
-localparam H_SYNC_TIME = 128;
+localparam H_BLANK_TIME = H_FRONT_PORCH + H_BACK_PORCH + H_SYNC_TIME;
+localparam H_TOTAL_TIME = H_ADDR_TIME + H_BLANK_TIME;
+localparam H_BLANK_START = H_ADDR_TIME;
+localparam H_SYNC_START = H_ADDR_TIME + H_FRONT_PORCH;
+
+
 
 //local parameters for rectangle drawing
 localparam RECT_WIDTH = 48;
