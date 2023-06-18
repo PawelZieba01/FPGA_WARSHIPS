@@ -19,7 +19,7 @@
 
 module top_warships (
     input logic vga_clk,
-    input logic clk100MHz,
+    input logic mouse_clk,
     input logic rst,
 
     inout logic ps2_clk,
@@ -133,7 +133,7 @@ module top_warships (
         .ps2_clk,
         .ps2_data,
 
-        .clk(clk100MHz),
+        .clk(mouse_clk),
         .rst,
 
         .xpos(x_pos),

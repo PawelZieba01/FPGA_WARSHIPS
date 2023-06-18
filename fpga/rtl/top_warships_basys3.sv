@@ -36,9 +36,9 @@ module top_warships_basys3 (
  */
 
 wire locked;
-wire clk100MHz;
-wire clk40MHz;
-wire clk40MHz_mirror;
+wire clk_65MHz;
+wire clk_50MHz;
+//wire clk40MHz_mirror;
 
 (* KEEP = "TRUE" *)
 (* ASYNC_REG = "TRUE" *)
@@ -50,7 +50,7 @@ wire clk40MHz_mirror;
  * Signals assignments
  */
 
-assign JA1 = clk40MHz_mirror;
+//assign JA1 = clk40MHz_mirror;
 
 
 /**
@@ -60,27 +60,27 @@ assign JA1 = clk40MHz_mirror;
  clk_wiz_0 u_clk_wiz_0 (
     .clk(clk),
     .locked(locked),
-    .clk100MHz(clk100MHz),
-    .clk40MHz(clk40MHz)
+    .clk_65MHz(clk_65MHz),
+    .clk_50MHz(clk_50MHz)
  );
 
- ODDR pclk_oddr (
-    .Q(clk40MHz_mirror),
-    .C(clk40MHz),
-    .CE(1'b1),
-    .D1(1'b1),
-    .D2(1'b0),
-    .R(1'b0),
-    .S(1'b0)
-);
+//  ODDR pclk_oddr (
+//     .Q(clk40MHz_mirror),
+//     .C(clk40MHz),
+//     .CE(1'b1),
+//     .D1(1'b1),
+//     .D2(1'b0),
+//     .R(1'b0),
+//     .S(1'b0)
+// );
 
 /**
  *  Project functional top module
  */
 
 top_warships u_top_warships (
-    .vga_clk(clk40MHz),
-    .clk100MHz,
+    .vga_clk(clk_65MHz),
+    .mouse_clk(clk_50MHz),
     .rst(btnC),
 
     .ps2_clk(PS2Clk),
