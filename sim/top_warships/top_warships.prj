@@ -1,0 +1,35 @@
+# Copyright (C) 2023  AGH University of Science and Technology
+# MTM UEC2
+# Author: Piotr Kaczmarczyk
+#
+# Description:
+# List of files defining the modules used during the test.
+# Specify the file paths relative to THIS file.
+# For syntax detail see AMD Xilinx UG 900:
+# https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
+
+
+sv work ../../rtl/vga/vga_pkg.sv \
+        ../../rtl/vga/vga_timing.sv \
+        ../../rtl/draw_bg.sv \
+        ../../rtl/top_warships.sv \
+        ../../rtl/vga/h_counter.sv \
+        ../../rtl/vga/v_counter.sv \
+        ../../rtl/rect/draw_rect.sv \
+        ../../rtl/mouse/draw_mouse.sv \
+        ../../rtl/rect/draw_rect_ctl.sv \
+        ../../rtl/rect_char/draw_rect_char.sv \
+        ../../rtl/rect_char/char_rom_16x16.sv \
+        ../../rtl/vga/vga_if.sv \
+        ../../rtl/rect/image_rom.sv \
+        ../../rtl/common/simple_clk_div.sv \
+        ../common/tiff_writer.sv \
+        top_warships_tb.sv
+
+vhdl work ../../rtl/mouse/MouseCtl.vhd \
+        ../../rtl/mouse/Ps2Interface.vhd \
+        ../../rtl/mouse/MouseDisplay.vhd 
+
+
+verilog work    ../../rtl/rect_char/font_rom.v \
+                ../../rtl/common/delay.v
