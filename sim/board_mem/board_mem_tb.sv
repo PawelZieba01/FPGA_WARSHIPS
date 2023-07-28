@@ -17,11 +17,11 @@ module board_mem_tb;
 
  //clk_write setup
 localparam CLK1_FREQ     = 1_000;
-localparam CLK1_PERIOD = (1/CLK1_FREQ) * 1_000_000_000;
+localparam CLK1_PERIOD = (1.0/CLK1_FREQ) * 1_000_000_000;
 
  //clk_read setup
 localparam CLK2_FREQ     = 65_000_000;
-localparam CLK2_PERIOD = (1/CLK2_FREQ) * 1_000_000_000;
+localparam CLK2_PERIOD = (1.0/CLK2_FREQ) * 1_000_000_000;
 
 localparam MEM_X_SIZE = 16;
 localparam MEM_Y_SIZE = 16;
@@ -35,9 +35,9 @@ localparam MEM_Y_ADDR_WIDTH = 4;
  */
 
 logic clk_write, clk_read;
-logic [7:0] mem_addr;   
-logic [1:0] write_data;
-logic [1:0]read_data;
+logic [MEM_Y_ADDR_WIDTH+MEM_X_ADDR_WIDTH-1 : 0] mem_addr_write, mem_addr_read;   
+logic [MEM_DATA_WIDTH-1:0] write_data;
+logic [MEM_DATA_WIDTH-1:0] read_data;
 logic write_enable;
 
 
@@ -70,8 +70,8 @@ board_mem #(
 dut (
     .write_clk(clk_write),
     .read_clk(clk_read),
-    .write_addr(mem_addr),
-    .read_addr(mem_addr),
+    .write_addr(mem_addr_write),
+    .read_addr(mem_addr_read),
     .write_data,
     .read_data,
     .write_enable
@@ -84,24 +84,26 @@ dut (
 
  always @(posedge clk_write) begin
     if(write_enable) begin
-        mem_addr++;
+        mem_addr_write++;
+        mem_addr_read++;
         write_data++;
     end
  end
 
+
 initial begin
     write_enable = 1'b0;
-    write_data = 1'b0;
-    mem_addr = 1'b0;
+    write_data = '0;
+    mem_addr_read = -1;
+    mem_addr_write = '0;
 
-    $display("SImulation start.");
-    #1s;
+    $display("Simulation start.");
+    #100;
     $display("Writting into ram memory.");
     write_enable = 1'b1;
 
-
-    wait(mem_addr < 1);
-    wait(mem_addr != 0);
+    wait(mem_addr_write == 1);
+    wait(mem_addr_write == 0);
 
     // End the simulation.
     $display("Simulation is over, check the waveforms.");
