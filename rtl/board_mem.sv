@@ -1,26 +1,20 @@
 //////////////////////////////////////////////////////////////////////////////
 /*
- Module name:   template_ram
- Author:        Robert Szczygiel
+ Module name:   board_mem
+ Author:        Pawel Zieba
  Version:       1.0
- Last modified: 2023-05-19
+ Last modified: 2023-07-29
  Coding style: Xilinx recommended + ANSI ports
- Description:  Template for RAM module as recommended by Xilinx. The module
- 				has second output port 'dpo', which can be removed when not needed
- 				(together with 'dpra' and 'read_dpra');
-
- ** This example shows the use of the Vivado rom_style attribute
- **
- ** Acceptable values are:
- ** block : Instructs the tool to infer RAMB type components.
- ** distributed : Instructs the tool to infer LUT ROMs.
- **
+ Description:  Memory module with 16x16 array, 2-bit data inside.
+			   8-bit read address and 8-bit write address.
+			   Working witch two different clocks (for writting and reading).
+			   Addresing: {[7:4] x_addr, [3:0] y_addr}
  */
 //////////////////////////////////////////////////////////////////////////////
  module board_mem 
     #( parameter
-		X_SIZE = 16,
-		Y_SIZE = 16,
+		X_SIZE = 16,		//memory array x size
+		Y_SIZE = 16,		//memory array y size
 		X_ADDR_WIDTH = 4,
         Y_ADDR_WIDTH = 4,
         DATA_WIDTH = 2
