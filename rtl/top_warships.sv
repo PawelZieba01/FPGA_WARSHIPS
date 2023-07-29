@@ -13,6 +13,7 @@
  *
  * Description:
  * The project top module.
+ * FPGA_WARSHIPS_2023
  */
 
 `timescale 1 ns / 1 ps
@@ -20,6 +21,7 @@
 module top_warships (
     input logic vga_clk,
     input logic mouse_clk,
+    input logic control_clk,
     input logic rst,
 
     inout logic ps2_clk,
