@@ -63,7 +63,6 @@ assign JA1 = clk_65MHz_mirror;
     .clk(clk),
     .locked(locked),
     .clk_65MHz(clk_65MHz),
-    .clk_50MHz(clk_50MHz),
     .clk_10MHz(clk_10MHz) 
  );
 
@@ -83,7 +82,7 @@ assign JA1 = clk_65MHz_mirror;
 
 top_warships u_top_warships (
     .vga_clk(clk_65MHz),
-    .mouse_clk(clk_50MHz),
+    .mouse_clk(clk_65MHz),
     .control_clk(clk_10MHz),
     .rst(btnC),
 
