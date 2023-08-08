@@ -13,6 +13,7 @@
  *
  * Description:
  * Top level synthesizable module including the project top and all the FPGA-referred modules.
+ * FPGA_WARSHIPS_2023
  */
 
 `timescale 1 ns / 1 ps
@@ -39,6 +40,7 @@ wire locked;
 wire clk_65MHz;
 wire clk_65MHz_mirror;
 wire clk_50MHz;
+wire clk_10MHz;
 
 (* KEEP = "TRUE" *)
 (* ASYNC_REG = "TRUE" *)
@@ -61,7 +63,7 @@ assign JA1 = clk_65MHz_mirror;
     .clk(clk),
     .locked(locked),
     .clk_65MHz(clk_65MHz),
-    .clk_50MHz(clk_50MHz)
+    .clk_10MHz(clk_10MHz) 
  );
 
  ODDR pclk_oddr (
@@ -80,7 +82,8 @@ assign JA1 = clk_65MHz_mirror;
 
 top_warships u_top_warships (
     .vga_clk(clk_65MHz),
-    .mouse_clk(clk_50MHz),
+    .mouse_clk(clk_65MHz),
+    .control_clk(clk_10MHz),
     .rst(btnC),
 
     .ps2_clk(PS2Clk),
