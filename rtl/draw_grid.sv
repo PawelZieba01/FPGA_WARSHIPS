@@ -5,18 +5,23 @@
  *
  * 
  * Description:
- * Draws grid with is a playboard for the game.
+ * Draws grid witch is a playboard for the game.
  */
 
 
  `timescale 1 ns / 1 ps
 
-localparam grid_size = 16;
-localparam grid_width  = 24;
+localparam grid_size = 12;
+localparam grid_width  = 32;
 localparam line_width =  2;
 
 
- module draw_grid (
+
+ module draw_grid #(parameter 
+    X_POS = 0,
+    Y_POS = 0,
+    ) 
+    (
      input  logic clk,
      input  logic rst,
      vga_if.in in,
@@ -62,18 +67,21 @@ localparam line_width =  2;
  always_comb begin : bg_comb_blk
      if (in.vblnk || in.hblnk) begin            
          rgb_nxt = 12'h0_0_0;                    
-     end else begin                              
-         if (in.vcount == 0)                    
-             rgb_nxt = 12'hf_f_0;                
-        
-         else if() begin
-
+     end 
+     else begin                              
+         if ((in.vcount >= X_POS) && (in.hcount >= Y_POS) && (in.vcount < X_POS+418) && (in.hcount < Y_POS+4180)) begin  
+            if((X_POS+in.vcount[5:0] == 4'b00000;)||(X_POS+in.vcount[5:0] == 4'b00001)||(Y_POS+in.hcount[5:0] == 4'b00000)||(Y_POS+in.hcount[5:0] == ))begin        
+             rgb_nxt = 12'hf_f_f;  
+            end
+            else begin
+                rgb_nxt = in.rgb;
+            end
          end
+        end
          else begin
             rgb_nxt = in.rgb;
          end          // - fill with gray.
      end
- end
  
  endmodule
  
