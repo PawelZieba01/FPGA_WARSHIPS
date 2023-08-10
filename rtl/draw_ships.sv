@@ -28,6 +28,11 @@
     localparam GRID_ELEMENT_WIDTH = 32;
     localparam GRID_BORDER_WIDTH = 2;
 
+    localparam GRID_STATUS_EMPTY = 2'b00;
+    localparam GRID_STATUS_MYSHIP = 2'b01;
+    localparam GRID_STATUS_MISS = 2'b10;
+    localparam GRID_STATUS_HIT = 2'b11;
+
     logic [7:0] grid_addr_nxt;
     logic [11:0] rgb_nxt;
     vga_if vga_delayed();
@@ -74,10 +79,15 @@
                 //draw ships if pixel is between grid lines
                 if((ships_origin_x[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_x[4:0] < GRID_ELEMENT_WIDTH)   &&
                     (ships_origin_y[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_y[4:0] < GRID_ELEMENT_HEIGHT)) begin
-                        rgb_nxt = 12'h0_F_0;    //print green color for test
+                        case(grid_status)
+                           GRID_STATUS_EMPTY:   rgb_nxt = 12'hF_F_F;
+                           GRID_STATUS_MYSHIP:  rgb_nxt = 12'h0_F_0;
+                           GRID_STATUS_MISS:    rgb_nxt = 12'h0_0_F;
+                           GRID_STATUS_HIT:     rgb_nxt = 12'hF_0_0;
+                        endcase
                     end
                     else begin
-                        rgb_nxt = vga_delayed.rgb;
+                        rgb_nxt = 12'h0_0_0;    //grid
                     end
             end
             else begin
