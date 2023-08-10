@@ -29,8 +29,9 @@
     localparam GRID_BORDER_WIDTH = 2;
 
     logic [7:0] grid_addr_nxt;
+    logic [11:0] rgb_nxt;
     vga_if vga_delayed;
-    vga_if vga_nxt;
+
 
     always_ff @(posedge clk) begin : output_signals_registers_blk
         if(rst) begin
@@ -51,22 +52,31 @@
             out.vblnk <= vga_delayed.vblnk;
             out.hsync <= vga_delayed.hsync;
             out.vsync <= vga_delayed.vsync;
-            out.rgb <= vga_delayed.rgb;
+            out.rgb <= rgb_nxt;
         end
     end
 
 
     always_comb begin : grid_addr_nxt_blk
-
+        grid_addr_nxt = 8'({in.hcount[8:5], in.vcount[8:5]}); //
     end
 
-
-    always_comb begin : vga_if_nxt_blk
-
-    end
 
     always_comb begin : rgb_nxt_blk
-
+        //draw ships if vga pixel is in grid space 
+        if((vga_delayed.hcount[8:5] >= 0 && vga_delayed.hcount[8:5] < GRID_COLUMNS)   &&
+            (vga_delayed.vcount[8:5] >= 0 && vga_delayed.vcount[8:5] < GRID_ROWS)) begin
+                if((vga_delayed.hcount[4:0] >= 0+GRID_BORDER_WIDTH && vga_delayed.hcount[4:0] < GRID_ELEMENT_WIDTH)   &&
+                    (vga_delayed.vcount[4:0] >= 0+GRID_BORDER_WIDTH && vga_delayed.vcount[4:0] < GRID_ELEMENT_HEIGHT)) begin
+                        rgb_nxt = 12'h0_F_0;    //print green color for test
+                    end
+                    else begin
+                        rgb_nxt = vga_delayed.rgb;
+                    end
+            end
+            else begin
+                rgb_nxt = vga_delayed.rgb;
+            end
     end
 
 
