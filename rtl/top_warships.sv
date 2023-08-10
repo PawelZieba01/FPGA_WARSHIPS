@@ -59,6 +59,7 @@ module top_warships (
     // VGA interfaces
     vga_if tim_if();
     vga_if bg_if();
+    vga_if ships_if();
     vga_if rect_if();
     vga_if mouse_if();
     vga_if font_if();
@@ -91,6 +92,16 @@ module top_warships (
         .out(bg_if)
     );
 
+    draw_ships #(.X_POS(100), .Y_POS(100))
+        u_draw_ships(
+            .clk(vga_clk),
+            .rst,
+            .in(bg_if),
+            .grid_status(2'b0),
+            .out(ships_if),
+            .grid_addr()
+        );
+
     draw_rect u_draw_rect (
         .clk(vga_clk),
         .rst,
@@ -101,7 +112,7 @@ module top_warships (
         .rgb_pixel,
         .pixel_addr,
 
-        .in(bg_if),
+        .in(ships_if),
         .out(rect_if)
     );
 
