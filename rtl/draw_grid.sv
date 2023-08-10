@@ -19,7 +19,7 @@ localparam line_width =  2;
 
  module draw_grid #(parameter 
     X_POS = 0,
-    Y_POS = 0,
+    Y_POS = 0
     ) 
     (
      input  logic clk,
@@ -38,6 +38,11 @@ localparam line_width =  2;
   */
  
  logic [11:0] rgb_nxt;
+ logic [10:0] vcount;
+ logic [10:0] hcount;
+
+ assign hcount = in.hcount-11'(Y_POS);
+ assign vcount = in.vcount-11'(X_POS);
  
  
  /**
@@ -53,7 +58,8 @@ localparam line_width =  2;
          out.hsync  <= '0;
          out.hblnk  <= '0;
          out.rgb    <= '0;
-     end else begin
+     end
+     else begin
          out.vcount <= in.vcount;
          out.vsync  <= in.vsync;
          out.vblnk  <= in.vblnk;
@@ -69,19 +75,19 @@ localparam line_width =  2;
          rgb_nxt = 12'h0_0_0;                    
      end 
      else begin                              
-         if ((in.vcount >= X_POS) && (in.hcount >= Y_POS) && (in.vcount < X_POS+418) && (in.hcount < Y_POS+4180)) begin  
-            if((X_POS+in.vcount[5:0] == 4'b00000;)||(X_POS+in.vcount[5:0] == 4'b00001)||(Y_POS+in.hcount[5:0] == 4'b00000)||(Y_POS+in.hcount[5:0] == ))begin        
+         if ((vcount >= 0) && (hcount >= 0) && (vcount < 385) && (hcount < 385)) begin  
+            //if((vcount[4:0] == 4'b00000)||(vcount[4:0] == 4'b00001)||(hcount[4:0] == 4'b00000)||(Y_POS+in.hcount[4:0] == 4'b00001 ))begin 
+            if((vcount[4:0] == 5'b00000)||(hcount[4:0] == 5'b00000))begin        
              rgb_nxt = 12'hf_f_f;  
             end
             else begin
                 rgb_nxt = in.rgb;
             end
-         end
         end
-         else begin
+        else begin
             rgb_nxt = in.rgb;
-         end          // - fill with gray.
+        end          // - fill with gray.
      end
- 
+    end
  endmodule
  
