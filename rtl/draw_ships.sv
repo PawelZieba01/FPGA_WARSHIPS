@@ -32,6 +32,11 @@
     logic [11:0] rgb_nxt;
     vga_if vga_delayed();
 
+    logic [10:0] ships_origin_x;
+    logic [10:0] ships_origin_y;
+
+    assign ships_origin_x = {vga_delayed.hcount-11'(X_POS)};
+    assign ships_origin_y = {vga_delayed.vcount-11'(Y_POS)};
 
     always_ff @(posedge clk) begin : output_signals_registers_blk
         if(rst) begin
@@ -58,17 +63,17 @@
 
 
     always_comb begin : grid_addr_nxt_blk
-        grid_addr_nxt = 8'({in.hcount[8:5], in.vcount[8:5]}); //
+        grid_addr_nxt = 8'({in.hcount[8:5], in.vcount[8:5]});
     end
 
 
     always_comb begin : rgb_nxt_blk
         //if vga pixel is in grid space 
-        if((vga_delayed.hcount[10:5] >= 0 && vga_delayed.hcount[10:5] < GRID_COLUMNS)   &&
-            (vga_delayed.vcount[10:5] >= 0 && vga_delayed.vcount[10:5] < GRID_ROWS)) begin
+        if((ships_origin_x[10:5] >= 0 && ships_origin_x[10:5] < GRID_COLUMNS)   &&
+            (ships_origin_y[10:5] >= 0 && ships_origin_y[10:5] < GRID_ROWS)) begin
                 //draw ships if pixel is between grid lines
-                if((vga_delayed.hcount[4:0] >= 0+GRID_BORDER_WIDTH && vga_delayed.hcount[4:0] < GRID_ELEMENT_WIDTH)   &&
-                    (vga_delayed.vcount[4:0] >= 0+GRID_BORDER_WIDTH && vga_delayed.vcount[4:0] < GRID_ELEMENT_HEIGHT)) begin
+                if((ships_origin_x[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_x[4:0] < GRID_ELEMENT_WIDTH)   &&
+                    (ships_origin_y[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_y[4:0] < GRID_ELEMENT_HEIGHT)) begin
                         rgb_nxt = 12'h0_F_0;    //print green color for test
                     end
                     else begin

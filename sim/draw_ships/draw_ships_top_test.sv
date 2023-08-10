@@ -58,7 +58,7 @@ module draw_ships_top_test (
         .out(bg_if)
     );
 
-    draw_ships #(.X_POS(0), .Y_POS(0))
+    draw_ships #(.X_POS(1), .Y_POS(1))
         u_draw_ships(
             .clk(vga_clk),
             .rst,
