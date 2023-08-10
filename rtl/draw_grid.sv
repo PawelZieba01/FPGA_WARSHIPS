@@ -75,9 +75,8 @@ localparam line_width =  2;
          rgb_nxt = 12'h0_0_0;                    
      end 
      else begin                              
-         if ((vcount >= 0) && (hcount >= 0) && (vcount < 385) && (hcount < 385)) begin  
-            //if((vcount[4:0] == 4'b00000)||(vcount[4:0] == 4'b00001)||(hcount[4:0] == 4'b00000)||(Y_POS+in.hcount[4:0] == 4'b00001 ))begin 
-            if((vcount[4:0] == 5'b00000)||(hcount[4:0] == 5'b00000))begin        
+         if ((vcount >= 0) && (hcount >= 0) && (vcount < 386) && (hcount < 386)) begin  
+            if((vcount[4:0] == 4'b00000)||(vcount[4:0] == 4'b00001)||(hcount[4:0] == 4'b00000)||(hcount[4:0] == 4'b00001 ))begin        
              rgb_nxt = 12'hf_f_f;  
             end
             else begin
