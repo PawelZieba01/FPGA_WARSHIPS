@@ -63,9 +63,10 @@
 
 
     always_comb begin : rgb_nxt_blk
-        //draw ships if vga pixel is in grid space 
-        if((vga_delayed.hcount[8:5] >= 0 && vga_delayed.hcount[8:5] < GRID_COLUMNS)   &&
-            (vga_delayed.vcount[8:5] >= 0 && vga_delayed.vcount[8:5] < GRID_ROWS)) begin
+        //if vga pixel is in grid space 
+        if((vga_delayed.hcount[10:5] >= 0 && vga_delayed.hcount[10:5] < GRID_COLUMNS)   &&
+            (vga_delayed.vcount[10:5] >= 0 && vga_delayed.vcount[10:5] < GRID_ROWS)) begin
+                //draw ships if pixel is between grid lines
                 if((vga_delayed.hcount[4:0] >= 0+GRID_BORDER_WIDTH && vga_delayed.hcount[4:0] < GRID_ELEMENT_WIDTH)   &&
                     (vga_delayed.vcount[4:0] >= 0+GRID_BORDER_WIDTH && vga_delayed.vcount[4:0] < GRID_ELEMENT_HEIGHT)) begin
                         rgb_nxt = 12'h0_F_0;    //print green color for test
