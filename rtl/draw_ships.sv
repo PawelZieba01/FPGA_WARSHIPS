@@ -30,7 +30,7 @@
 
     logic [7:0] grid_addr_nxt;
     logic [11:0] rgb_nxt;
-    vga_if vga_delayed;
+    vga_if vga_delayed();
 
 
     always_ff @(posedge clk) begin : output_signals_registers_blk
