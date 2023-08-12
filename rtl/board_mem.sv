@@ -13,8 +13,8 @@
 //////////////////////////////////////////////////////////////////////////////
  module board_mem 
     #( parameter
-		X_SIZE = 16,		//memory array x size
-		Y_SIZE = 16,		//memory array y size
+		X_SIZE = 12,		//memory array x size
+		Y_SIZE = 12,		//memory array y size
 		X_ADDR_WIDTH = 4,
         Y_ADDR_WIDTH = 4,
         DATA_WIDTH = 2
