@@ -44,11 +44,11 @@ module top_warships (
     logic [11:0] x_pos_ctl, y_pos_ctl;
 
     //rom_pixel
-    logic [11:0] pixel_addr;
+    logic [13:0] pixel_addr;
     logic [11:0] rgb_pixel;
 
     logic [11:0] rgb_pixel_start_btn;
-    logic [11:0] rgb_pixel_addr_start_btn;
+    logic [13:0] rgb_pixel_addr_start_btn;
 
     //font_signals
     logic [7:0] char_pixels;
@@ -97,11 +97,15 @@ module top_warships (
     );
 
 
-    draw_rect u_draw_start_btn(
+    draw_rect 
+    #(  .RECT_HEIGHT(64),
+        .RECT_WIDTH(128)
+    )
+    u_draw_start_btn(
         .clk(vga_clk),
         .rst,
-        .x_pos(200),
-        .y_pos(200),
+        .x_pos(12'd200),
+        .y_pos(12'd200),
         .in(bg_if),
         .out(start_btn_if),
 
@@ -112,12 +116,12 @@ module top_warships (
     image_rom #(.IMG_DATA_PATH("../../rtl/rect/start_btn_png.dat"))
     u_image_rom_btn_start(
         .clk(vga_clk),
-        .address(rgb_pixel_start_btn),
+        .address(rgb_pixel_addr_start_btn),
         .rgb(rgb_pixel_start_btn)
     );    
 
 
-    draw_ships #(.X_POS(100), .Y_POS(100))
+    draw_ships #(.X_POS(500), .Y_POS(500))
         u_draw_ships(
             .clk(vga_clk),
             .rst,
