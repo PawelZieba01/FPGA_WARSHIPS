@@ -62,11 +62,11 @@ always_comb begin : bg_comb_blk
     end else begin                                                                          // Active region:
         if (in.vcount >= 0 && in.vcount < BORDER_WIDTH)                                     // - top edge:
             rgb_nxt = 12'hf_f_0;                                                            // - - make a yellow line.
-        else if ((in.vcount >= VER_PIXELS - BORDER_WIDTH) && (in.vcount < VER_PIXELS))      // - bottom edge:
+        else if ((in.vcount >= VER_PIXELS - BORDER_WIDTH-1) && (in.vcount < VER_PIXELS))      // - bottom edge:
             rgb_nxt = 12'hf_0_0;                                                            // - - make a red line.
         else if (in.hcount >= 0 && in.hcount < BORDER_WIDTH)                                // - left edge:
             rgb_nxt = 12'h0_f_0;                                                            // - - make a green line.
-            else if ((in.hcount >= HOR_PIXELS - BORDER_WIDTH) && (in.hcount < HOR_PIXELS))  // - right edge:
+            else if ((in.hcount >= HOR_PIXELS - BORDER_WIDTH-1) && (in.hcount < HOR_PIXELS))  // - right edge:
             rgb_nxt = 12'h0_0_f;                                                            // - - make a blue line.
         else                                            // The rest of active display pixels:
             rgb_nxt = BACKGROUND_COLOR;                 // - fill with gray.
