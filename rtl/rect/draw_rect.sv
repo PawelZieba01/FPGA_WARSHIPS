@@ -9,12 +9,11 @@
 
  `timescale 1 ns / 1 ps
 
-localparam RECT_WIDTH = 48;
-localparam RECT_HEIGHT = 64;
-localparam RECT_COLOUR = 12'hf_0_0;
 
-
-module draw_rect (
+module draw_rect #( parameter
+    RECT_WIDTH = 48,
+    RECT_HEIGHT = 64
+)(
     input logic clk,
     input logic rst,
 
@@ -22,7 +21,7 @@ module draw_rect (
     input logic [11:0] y_pos,
 
     input logic [11:0] rgb_pixel,
-    output logic [11:0] pixel_addr,
+    output logic [13:0] pixel_addr,
 
     vga_if.in in,
     vga_if.out out
@@ -32,7 +31,7 @@ module draw_rect (
     logic [11:0] x_pos_sync;
     logic [11:0] y_pos_sync;
 
-    logic [11:0] pixel_addr_nxt; 
+    logic [13:0] pixel_addr_nxt; 
 
     logic [10:0] hcount_nxt1, vcount_nxt1, hcount_nxt2, vcount_nxt2;
     logic hsync_nxt1, hblnk_nxt1, vsync_nxt1, vblnk_nxt1, hsync_nxt2, hblnk_nxt2, vsync_nxt2, vblnk_nxt2;
@@ -91,7 +90,7 @@ module draw_rect (
 
 /*----------- pixer_addr output signal generation -----------*/
     always_comb begin : pixel_addr_nxt_blk
-        pixel_addr_nxt = {6'(in.vcount - y_pos_sync), 6'(in.hcount - x_pos_sync)};
+        pixel_addr_nxt = ((in.vcount - y_pos_sync)<<$clog2(RECT_WIDTH)) + (in.hcount - x_pos_sync);
     end
 
     always_ff @(posedge clk) begin : pixel_addr_blk

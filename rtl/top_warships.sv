@@ -44,8 +44,11 @@ module top_warships (
     logic [11:0] x_pos_ctl, y_pos_ctl;
 
     //rom_pixel
-    logic [11:0] pixel_addr;
+    logic [13:0] pixel_addr;
     logic [11:0] rgb_pixel;
+
+    logic [11:0] rgb_pixel_start_btn;
+    logic [13:0] rgb_pixel_addr_start_btn;
 
     //font_signals
     logic [7:0] char_pixels;
@@ -59,6 +62,7 @@ module top_warships (
     // VGA interfaces
     vga_if tim_if();
     vga_if bg_if();
+    vga_if start_btn_if();
     vga_if ships_if();
     vga_if rect_if();
     vga_if mouse_if();
@@ -92,15 +96,42 @@ module top_warships (
         .out(bg_if)
     );
 
-    draw_ships #(.X_POS(100), .Y_POS(100))
+
+    draw_rect 
+    #(  .RECT_HEIGHT(64),
+        .RECT_WIDTH(128)
+    )
+    u_draw_start_btn(
+        .clk(vga_clk),
+        .rst,
+        .x_pos(12'd200),
+        .y_pos(12'd200),
+        .in(bg_if),
+        .out(start_btn_if),
+
+        .rgb_pixel(rgb_pixel_start_btn),
+        .pixel_addr(rgb_pixel_addr_start_btn)
+    );
+    
+    image_rom #(.IMG_DATA_PATH("../../rtl/rect/start_btn_png.dat"))
+    u_image_rom_btn_start(
+        .clk(vga_clk),
+        .address(rgb_pixel_addr_start_btn),
+        .rgb(rgb_pixel_start_btn)
+    );    
+
+
+    draw_ships #(.X_POS(500), .Y_POS(500))
         u_draw_ships(
             .clk(vga_clk),
             .rst,
-            .in(bg_if),
+            .in(start_btn_if),
             .grid_status(2'b0),
             .out(ships_if),
             .grid_addr()
         );
+
+
 
     draw_rect u_draw_rect (
         .clk(vga_clk),

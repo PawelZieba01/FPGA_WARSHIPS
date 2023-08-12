@@ -7,17 +7,17 @@
  * Modified: Pawel Zieba   
  *
  * Description:
- * This is the ROM for the 'AGH48x64.png' image.
- * The image size is 48 x 64 pixels.
  * The input 'address' is a 12-bit number, composed of the concatenated
- * 6-bit y and 6-bit x pixel coordinates.
+ * 7-bit y and 7-bit x pixel coordinates.
  * The output 'rgb' is 12-bit number with concatenated
  * red, green and blue color values (4-bit each)
  */
 
-module image_rom (
+ module image_rom #( parameter
+    IMG_DATA_PATH = "../../rtl/rect/image_rom.data"
+)(
     input  logic clk ,
-    input  logic [11:0] address,  // address = {addry[5:0], addrx[5:0]}
+    input  logic [13:0] address,  // address = {addry[6:0], addrx[6:0]}
     output logic [11:0] rgb
 );
 
@@ -26,7 +26,7 @@ module image_rom (
  * Local variables and signals
  */
 
-reg [11:0] rom [0:4095];
+reg [11:0] rom [0:16383];
 
 
 /**
@@ -34,7 +34,7 @@ reg [11:0] rom [0:4095];
  */
 
 /* Relative path from the simulation or synthesis working directory */
-initial $readmemh("../../rtl/rect/image_rom.data", rom);
+initial $readmemh(IMG_DATA_PATH, rom);
 //initial $readmemh("./image_rom.data", rom);
 
 
