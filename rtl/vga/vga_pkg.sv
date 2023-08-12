@@ -39,13 +39,15 @@ localparam H_TOTAL_TIME = H_ADDR_TIME + H_BLANK_TIME;
 localparam H_BLANK_START = H_ADDR_TIME;
 localparam H_SYNC_START = H_ADDR_TIME + H_FRONT_PORCH;
 
+//Parameters for background drawing
+localparam BORDER_WIDTH = 3;
+localparam BACKGROUND_COLOR = 12'hA_A_A;
 
-
-//local parameters for rectangle drawing
+//Parameters for rectangle drawing
 localparam RECT_WIDTH = 48;
 localparam RECT_HEIGHT = 64;
 
-//local parameters for text drawing
+//Parameters for text drawing
 localparam TEXT_COLOR = 12'h0_0_0;
 localparam FONT_RECT_WIDTH = 128;
 localparam FONT_RECT_HEIGHT = 256;
