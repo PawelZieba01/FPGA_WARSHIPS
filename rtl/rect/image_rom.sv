@@ -15,7 +15,9 @@
  * red, green and blue color values (4-bit each)
  */
 
-module image_rom (
+ module image_rom #( parameter
+    IMG_DATA_PATH = "../../rtl/rect/image_rom.data"
+)(
     input  logic clk ,
     input  logic [11:0] address,  // address = {addry[5:0], addrx[5:0]}
     output logic [11:0] rgb
@@ -34,7 +36,7 @@ reg [11:0] rom [0:4095];
  */
 
 /* Relative path from the simulation or synthesis working directory */
-initial $readmemh("../../rtl/rect/image_rom.data", rom);
+initial $readmemh(IMG_DATA_PATH, rom);
 //initial $readmemh("./image_rom.data", rom);
 
 
