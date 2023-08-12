@@ -76,4 +76,5 @@ set vhdl_files {
 # Specify files for a memory initialization     -- EDIT
 set mem_files {
    ../rtl/rect/image_rom.data
+   ../rtl/rect/start_btn_png.dat
 }
