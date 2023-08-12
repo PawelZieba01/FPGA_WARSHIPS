@@ -55,6 +55,7 @@ set sv_files {
     rtl/top_warships_basys3.sv
 
     ../rtl/board_mem.sv
+    ../rtl/draw_ships.sv
 }
 
 # Specify Verilog design files location         -- EDIT
