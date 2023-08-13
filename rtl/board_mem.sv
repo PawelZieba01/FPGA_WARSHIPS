@@ -31,20 +31,32 @@
 	);
 
 	(* ram_style = "block" *)
-	logic [DATA_WIDTH-1 : 0] ram [X_SIZE][Y_SIZE];
+	logic [DATA_WIDTH-1 : 0] ram [0:(1<<(Y_ADDR_WIDTH+X_ADDR_WIDTH))-1];
 
+	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_write_addr;
+	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_read_addr;
 
+	assign ram_write_addr 	= 	write_addr[7:4] + (write_addr[3:0])*12;
+	assign ram_read_addr 	= 	read_addr[7:4] + (read_addr[3:0])*12;
 
 	always_ff @(posedge write_clk) begin : ram_write_blk
 		if (write_enable) begin
-			ram [write_addr[7:4]][write_addr[3:0]] <= write_data;
+			ram [ram_write_addr] <= write_data;
 		end
 	end
 
     always_ff @(posedge read_clk) begin : ram_read_blk
-		read_data <= ram[read_addr[7:4]][read_addr[3:0]];
+		read_data <= ram[ram_read_addr];
 	end
 
 
+	//for simulation
+	initial begin
+		for(int x=0; x<X_SIZE; x++) begin
+			for(int y=0; y<Y_SIZE; y++) begin
+				ram[x+y*X_SIZE] <= 2'(x+y);
+			end
+		end
+	end
 endmodule
 

@@ -26,7 +26,7 @@
     localparam GRID_COLUMNS = 12;
     localparam GRID_ELEMENT_HEIGHT = 32;
     localparam GRID_ELEMENT_WIDTH = 32;
-    localparam GRID_BORDER_WIDTH = 2;
+    localparam GRID_BORDER_WIDTH = 1;
 
     localparam GRID_STATUS_EMPTY = 2'b00;
     localparam GRID_STATUS_MYSHIP = 2'b01;
@@ -39,9 +39,13 @@
 
     logic [10:0] ships_origin_x;
     logic [10:0] ships_origin_y;
+    logic [10:0] ships_origin_x_delayed;
+    logic [10:0] ships_origin_y_delayed;
 
-    assign ships_origin_x = {vga_delayed.hcount-11'(X_POS)};
-    assign ships_origin_y = {vga_delayed.vcount-11'(Y_POS)};
+    assign ships_origin_x = {in.hcount-11'(X_POS)};
+    assign ships_origin_y = {in.vcount-11'(Y_POS)};
+    assign ships_origin_x_delayed = {vga_delayed.hcount-11'(X_POS)};
+    assign ships_origin_y_delayed = {vga_delayed.vcount-11'(Y_POS)};
 
     always_ff @(posedge clk) begin : output_signals_registers_blk
         if(rst) begin
@@ -68,17 +72,17 @@
 
 
     always_comb begin : grid_addr_nxt_blk
-        grid_addr_nxt = 8'({in.hcount[8:5], in.vcount[8:5]});
+        grid_addr_nxt = 8'({ships_origin_x[8:5], ships_origin_y[8:5]});
     end
 
 
     always_comb begin : rgb_nxt_blk
         //if vga pixel is in grid space 
-        if((ships_origin_x[10:5] >= 0 && ships_origin_x[10:5] < GRID_COLUMNS)   &&
-            (ships_origin_y[10:5] >= 0 && ships_origin_y[10:5] < GRID_ROWS)) begin
+        if((ships_origin_x_delayed[10:5] >= 0 && ships_origin_x_delayed[10:5] < GRID_COLUMNS)   &&
+            (ships_origin_y_delayed[10:5] >= 0 && ships_origin_y_delayed[10:5] < GRID_ROWS)) begin
                 //draw ships if pixel is between grid lines
-                if((ships_origin_x[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_x[4:0] < GRID_ELEMENT_WIDTH)   &&
-                    (ships_origin_y[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_y[4:0] < GRID_ELEMENT_HEIGHT)) begin
+                if((ships_origin_x_delayed[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_x_delayed[4:0] < GRID_ELEMENT_WIDTH)   &&
+                    (ships_origin_y_delayed[4:0] >= 0+GRID_BORDER_WIDTH && ships_origin_y_delayed[4:0] < GRID_ELEMENT_HEIGHT)) begin
                         case(grid_status)
                            GRID_STATUS_EMPTY:   rgb_nxt = 12'hF_F_F;
                            GRID_STATUS_MYSHIP:  rgb_nxt = 12'h0_F_0;
@@ -96,7 +100,7 @@
     end
 
 
-    delay #(.WIDTH(38), .CLK_DEL(3)) u_delay_vga(    
+    delay #(.WIDTH(38), .CLK_DEL(2)) u_delay_vga(    
         .clk,
         .rst,
         .din({in.hcount, in.vcount, in.hsync, in.vsync, in.hblnk, in.vblnk ,in.rgb}),
