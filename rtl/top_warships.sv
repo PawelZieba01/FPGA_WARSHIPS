@@ -129,7 +129,7 @@ module top_warships (
 
     //-----------------------------------------MY_SHIPS----------------------------------------------
 
-    draw_ships #(.X_POS(500), .Y_POS(500))
+    draw_ships #(.X_POS(500), .Y_POS(200))
         u_draw_my_ships(
             .clk(vga_clk),
             .rst,

@@ -26,7 +26,7 @@
     localparam GRID_COLUMNS = 12;
     localparam GRID_ELEMENT_HEIGHT = 32;
     localparam GRID_ELEMENT_WIDTH = 32;
-    localparam GRID_BORDER_WIDTH = 2;
+    localparam GRID_BORDER_WIDTH = 1;
 
     localparam GRID_STATUS_EMPTY = 2'b00;
     localparam GRID_STATUS_MYSHIP = 2'b01;
@@ -100,7 +100,7 @@
     end
 
 
-    delay #(.WIDTH(38), .CLK_DEL(3)) u_delay_vga(    
+    delay #(.WIDTH(38), .CLK_DEL(2)) u_delay_vga(    
         .clk,
         .rst,
         .din({in.hcount, in.vcount, in.hsync, in.vsync, in.hblnk, in.vblnk ,in.rgb}),
