@@ -46,5 +46,13 @@
 	end
 
 
+	//for simulation
+	initial begin
+		for(int x=0; x<X_SIZE; x++) begin
+			for(int y=0; y<Y_SIZE; y++) begin
+				ram[x][y] <= 2'b0;
+			end
+		end
+	end
 endmodule
 

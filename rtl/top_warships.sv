@@ -42,6 +42,7 @@ module top_warships (
     // Mouse position signals
     logic [11:0] x_pos, y_pos;
     logic [11:0] x_pos_ctl, y_pos_ctl;
+    logic mouse_left;
 
     //rom_pixel
     logic [13:0] pixel_addr;
@@ -56,8 +57,11 @@ module top_warships (
     logic [3:0] char_line;
     logic [6:0] char_code;
 
-
-    logic mouse_left;
+    //my board memory and draw ships signals
+    logic [7:0] my_board_read_addr, my_board_write_addr;
+    logic [1:0] my_board_read_data, my_board_write_data;
+    logic my_board_write_enable;
+    
 
     // VGA interfaces
     vga_if tim_if();
@@ -81,12 +85,14 @@ module top_warships (
     /**
      * Submodules instances
      */
-
+    
     vga_timing u_vga_timing (
         .clk(vga_clk),
         .rst,
         .out(tim_if)
     );
+
+    //---------------------------------------BACKGROUND------------------------------------------
 
     draw_bg u_draw_bg (
         .clk(vga_clk),
@@ -96,6 +102,7 @@ module top_warships (
         .out(bg_if)
     );
 
+    //--------------------------------------START BUTTON-----------------------------------------
 
     draw_rect 
     #(  .RECT_HEIGHT(64),
@@ -120,18 +127,37 @@ module top_warships (
         .rgb(rgb_pixel_start_btn)
     );    
 
+    //-----------------------------------------MY_SHIPS----------------------------------------------
 
     draw_ships #(.X_POS(500), .Y_POS(500))
-        u_draw_ships(
+        u_draw_my_ships(
             .clk(vga_clk),
             .rst,
             .in(start_btn_if),
-            .grid_status(2'b0),
+            .grid_status(my_board_read_data),
             .out(ships_if),
-            .grid_addr()
+            .grid_addr(my_board_read_addr)
         );
 
+    board_mem #(
+        .DATA_WIDTH(2),
+        .X_ADDR_WIDTH(4),
+        .Y_ADDR_WIDTH(4),
+        .X_SIZE(12),
+        .Y_SIZE(12)
+    )
+    u_my_board_mem
+    (
+        .read_clk(vga_clk),
+        .write_clk(control_clk),
+        .read_addr(my_board_read_addr),
+        .write_addr(my_board_write_addr),
+        .read_data(my_board_read_data),
+        .write_data(my_board_write_data),
+        .write_enable(my_board_write_enable)
+    );
 
+    //--------------------------------------DRAW LOGO AGH-------------------------------------------
 
     draw_rect u_draw_rect (
         .clk(vga_clk),
@@ -173,6 +199,8 @@ module top_warships (
         .rgb(rgb_pixel)
     );
 
+    //---------------------------------------MOUSE----------------------------------------------
+
     MouseCtl u_MouseCtl (
         .ps2_clk,
         .ps2_data,
@@ -206,6 +234,8 @@ module top_warships (
         .out(mouse_if)
     );
 
+    //-------------------------------------DRAW TEXT-----------------------------------------------
+
     draw_rect_char #(.X_POS(48), .Y_POS(64)) u_draw_rect_char (
         .clk(vga_clk),
         .rst,
@@ -229,5 +259,7 @@ module top_warships (
         .char_xy(char_xy),
         .char_code(char_code)
     );
+
+    //-------------------------------------------------------------------------------------------
 
 endmodule
