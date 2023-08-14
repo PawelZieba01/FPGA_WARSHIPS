@@ -11,9 +11,8 @@
 
  `timescale 1 ns / 1 ps
 
-localparam GRID_SIZE = 386;
-localparam grid_width  = 32;
-localparam line_width =  2;
+localparam GRID_SIZE = 384;
+localparam GRID_BORDER_WIDTH = 2;
 
 
 
@@ -75,9 +74,9 @@ localparam line_width =  2;
          rgb_nxt = 12'h0_0_0;                    
      end 
      else begin                              
-         if ((vcount >= 0) && (hcount >= 0) && (vcount < GRID_SIZE) && (hcount < GRID_SIZE)) begin  
-            if((vcount[4:0] == 4'b00000)||(vcount[4:0] == 4'b00001)||(hcount[4:0] == 4'b00000)||(hcount[4:0] == 4'b00001 ))begin        
-             rgb_nxt = 12'hf_f_f;  
+         if ((vcount >= 0) && (hcount >= 0) && (vcount < GRID_SIZE+GRID_BORDER_WIDTH) && (hcount < GRID_SIZE+GRID_BORDER_WIDTH)) begin  
+            if(((vcount[4:0] >= 0)&&(vcount[4:0] < GRID_BORDER_WIDTH)) || ((hcount[4:0] >= 0)&&(hcount[4:0] < GRID_BORDER_WIDTH )))begin        
+             rgb_nxt = 12'h0_0_0;  //black
             end
             else begin
                 rgb_nxt = in.rgb;
