@@ -48,6 +48,12 @@ module top_warships (
     logic [7:0] enemy_board_read_addr, enemy_board_write_addr;
     logic [1:0] enemy_board_read_data, enemy_board_write_data;
     logic enemy_board_write_enable;
+
+    //text my ships signals
+    logic [7:0] ms_char_pixels;
+    logic [3:0] ms_char_line;
+    logic [7:0] ms_char_xy;
+    logic [6:0] ms_char_code;
     
     // VGA interfaces
     vga_if tim_if();
@@ -55,6 +61,7 @@ module top_warships (
     vga_if start_btn_if();
     vga_if my_ships_if();
     vga_if enemy_ships_if();
+    vga_if text_my_ships_if();
     vga_if mouse_if();
 
 
@@ -169,6 +176,32 @@ module top_warships (
         .write_data(enemy_board_write_data),
         .write_enable(enemy_board_write_enable)
     );
+    
+    //-------------------------------------DRAW TEXT-----------------------------------------------
+    draw_rect_char #(.X_POS(100), .Y_POS(182)) u_draw_text_my_ships (
+        .clk(vga_clk),
+        .rst,
+
+        .char_pixels(ms_char_pixels),
+        .char_line(ms_char_line),
+        .char_xy(ms_char_xy),
+
+        .in(enemy_ships_if),
+        .out(text_my_ships_if)
+    );
+
+    font_rom u_font_rom (
+        .clk(vga_clk),
+        .char_line_pixels(ms_char_pixels),
+        .addr({ms_char_code, ms_char_line})
+    );
+
+    char_rom_16x16 u_char_rom_16x16 (
+        .clk(vga_clk),
+        .char_xy(ms_char_xy),
+        .char_code(ms_char_code)
+    );
+
 
     //---------------------------------------MOUSE----------------------------------------------
     MouseCtl u_MouseCtl (
@@ -200,7 +233,7 @@ module top_warships (
         .x_pos(mouse_x_pos),
         .y_pos(mouse_y_pos),
 
-        .in(enemy_ships_if),
+        .in(text_my_ships_if),
         .out(mouse_if)
     );
 
