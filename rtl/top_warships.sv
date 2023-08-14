@@ -178,7 +178,7 @@ module top_warships (
     );
     
     //-------------------------------------DRAW TEXT-----------------------------------------------
-    draw_rect_char #(.X_POS(100), .Y_POS(182)) u_draw_text_my_ships (
+    draw_rect_char #(.X_POS(100), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_my_ships (
         .clk(vga_clk),
         .rst,
 
@@ -196,7 +196,7 @@ module top_warships (
         .addr({ms_char_code, ms_char_line})
     );
 
-    char_rom_16x16 u_char_rom_16x16 (
+    char_rom_16x16 #(.TEXT("MY BOARD")) u_char_rom_16x16 (
         .clk(vga_clk),
         .char_xy(ms_char_xy),
         .char_code(ms_char_code)

@@ -9,9 +9,12 @@
 
  `timescale 1 ns / 1 ps
 
+// Two text size:
+// - 0 -> char 8x16
+// - 1 -> char 16x32
 module draw_rect_char 
 #(
-    parameter X_POS, Y_POS
+    parameter X_POS, Y_POS, TEXT_SIZE=0
 )
 (
     input logic clk,
@@ -45,7 +48,7 @@ module draw_rect_char
     delay #(.WIDTH(4), .CLK_DEL(1)) u_delay_char_line(    
         .clk,
         .rst,
-        .din(4'(in.vcount - Y_POS)),
+        .din(4'((in.vcount - Y_POS)>>TEXT_SIZE)),
         .dout(char_line_delayed)
     );
 
@@ -76,8 +79,8 @@ module draw_rect_char
         end
     end
 
-    assign char_xy_nxt = {4'((in.vcount - Y_POS) >> 4), 4'((in.hcount - X_POS) >> 3)};
-    assign pixel_in_line = 3'(vga_delayed.hcount - X_POS);
+    assign char_xy_nxt = {4'((in.vcount - Y_POS) >> (4+TEXT_SIZE)), 4'((in.hcount - X_POS) >> (3+TEXT_SIZE))};
+    assign pixel_in_line = 3'((vga_delayed.hcount - X_POS)>>TEXT_SIZE);
 
 
     always_comb begin : rgb_nxt_blk
