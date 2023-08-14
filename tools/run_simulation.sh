@@ -64,6 +64,7 @@ function execute_test {
     fi
 
     cd ..
+    display ../results/frame000.tif
 }
 
 # Run all available simulations

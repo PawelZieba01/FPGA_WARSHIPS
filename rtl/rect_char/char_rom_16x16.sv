@@ -7,20 +7,20 @@
  * 256 characters in rom.
  */
 
-module char_rom_16x16 (
+module char_rom_16x16 #( parameter
+    TEXT = "Basic text"
+    )(
     input   logic       clk,
     input   logic [7:0] char_xy,    //[7:4] y, [3:0] x
     output  logic [6:0] char_code
 );
     import vga_pkg::*;
-
-    localparam TEXT_TO_DISPLAY = "Lorem ipsum dolor sit amet consectetur adipiscing elit interdum, euismod ut aliquam suspendisse elementum semper nam vulputate, ligula habitant himenaeos auctor quam ad fusce. Eros facilisi diam platea venenatis est condimentum, convallis tempor curae tor.";
     
     logic [3:0] x_pos;
     logic [3:0] y_pos;
     logic [7:0] char_code_nxt;
 
-    logic [CHAR_NUMBER-1:0][CHAR_BIT_LENGTH-1:0] rom = {<<8{TEXT_TO_DISPLAY}};
+    logic [CHAR_NUMBER-1:0][CHAR_BIT_LENGTH-1:0] rom = {<<8{TEXT}};
 
     assign x_pos             =   char_xy[3:0];
     assign y_pos             =   char_xy[7:4];

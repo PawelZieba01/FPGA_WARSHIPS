@@ -48,6 +48,18 @@ module top_warships (
     logic [7:0] enemy_board_read_addr, enemy_board_write_addr;
     logic [1:0] enemy_board_read_data, enemy_board_write_data;
     logic enemy_board_write_enable;
+
+    //text my ships signals
+    logic [7:0] ms_char_pixels;
+    logic [3:0] ms_char_line;
+    logic [7:0] ms_char_xy;
+    logic [6:0] ms_char_code;
+
+    //text ENEMY ships signals
+    logic [7:0] e_char_pixels;
+    logic [3:0] e_char_line;
+    logic [7:0] e_char_xy;
+    logic [6:0] e_char_code;
     
     // VGA interfaces
     vga_if tim_if();
@@ -55,6 +67,8 @@ module top_warships (
     vga_if start_btn_if();
     vga_if my_ships_if();
     vga_if enemy_ships_if();
+    vga_if text_my_ships_if();
+    vga_if text_e_ships_if();
     vga_if mouse_if();
 
 
@@ -169,6 +183,59 @@ module top_warships (
         .write_data(enemy_board_write_data),
         .write_enable(enemy_board_write_enable)
     );
+    
+    //----------------------------------DRAW TEXT (MY BOARD)--------------------------------------------
+    // for ready project - change text position - issue from e800570 commit
+    draw_rect_char #(.X_POS(100), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_my_ships (
+        .clk(vga_clk),
+        .rst,
+
+        .char_pixels(ms_char_pixels),
+        .char_line(ms_char_line),
+        .char_xy(ms_char_xy),
+
+        .in(enemy_ships_if),
+        .out(text_my_ships_if)
+    );
+
+    font_rom u_my_font_rom (
+        .clk(vga_clk),
+        .char_line_pixels(ms_char_pixels),
+        .addr({ms_char_code, ms_char_line})
+    );
+
+    char_rom_16x16 #(.TEXT("MY BOARD")) u_char_my_rom_16x16 (
+        .clk(vga_clk),
+        .char_xy(ms_char_xy),
+        .char_code(ms_char_code)
+    );
+
+    //----------------------------------DRAW TEXT (ENEMY BOARD)--------------------------------------------
+    // for ready project - change text position - issue from e800570 commit
+    draw_rect_char #(.X_POS(538), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_enemy_ships (
+        .clk(vga_clk),
+        .rst,
+
+        .char_pixels(e_char_pixels),
+        .char_line(e_char_line),
+        .char_xy(e_char_xy),
+
+        .in(text_my_ships_if),
+        .out(text_e_ships_if)
+    );
+
+    font_rom u_e_font_rom (
+        .clk(vga_clk),
+        .char_line_pixels(e_char_pixels),
+        .addr({e_char_code, e_char_line})
+    );
+
+    char_rom_16x16 #(.TEXT("ENEMY BOARD")) u_char_e_rom_16x16 (
+        .clk(vga_clk),
+        .char_xy(e_char_xy),
+        .char_code(e_char_code)
+    );
+
 
     //---------------------------------------MOUSE----------------------------------------------
     MouseCtl u_MouseCtl (
@@ -200,7 +267,7 @@ module top_warships (
         .x_pos(mouse_x_pos),
         .y_pos(mouse_y_pos),
 
-        .in(enemy_ships_if),
+        .in(text_e_ships_if),
         .out(mouse_if)
     );
 
