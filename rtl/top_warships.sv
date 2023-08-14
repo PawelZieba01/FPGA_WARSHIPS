@@ -54,6 +54,12 @@ module top_warships (
     logic [3:0] ms_char_line;
     logic [7:0] ms_char_xy;
     logic [6:0] ms_char_code;
+
+    //text ENEMY ships signals
+    logic [7:0] e_char_pixels;
+    logic [3:0] e_char_line;
+    logic [7:0] e_char_xy;
+    logic [6:0] e_char_code;
     
     // VGA interfaces
     vga_if tim_if();
@@ -62,6 +68,7 @@ module top_warships (
     vga_if my_ships_if();
     vga_if enemy_ships_if();
     vga_if text_my_ships_if();
+    vga_if text_e_ships_if();
     vga_if mouse_if();
 
 
@@ -177,7 +184,7 @@ module top_warships (
         .write_enable(enemy_board_write_enable)
     );
     
-    //-------------------------------------DRAW TEXT-----------------------------------------------
+    //----------------------------------DRAW TEXT (MY BOARD)--------------------------------------------
     draw_rect_char #(.X_POS(100), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_my_ships (
         .clk(vga_clk),
         .rst,
@@ -190,16 +197,41 @@ module top_warships (
         .out(text_my_ships_if)
     );
 
-    font_rom u_font_rom (
+    font_rom u_my_font_rom (
         .clk(vga_clk),
         .char_line_pixels(ms_char_pixels),
         .addr({ms_char_code, ms_char_line})
     );
 
-    char_rom_16x16 #(.TEXT("MY BOARD")) u_char_rom_16x16 (
+    char_rom_16x16 #(.TEXT("MY BOARD")) u_char_my_rom_16x16 (
         .clk(vga_clk),
         .char_xy(ms_char_xy),
         .char_code(ms_char_code)
+    );
+
+    //----------------------------------DRAW TEXT (ENEMY BOARD)--------------------------------------------
+    draw_rect_char #(.X_POS(538), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_enemy_ships (
+        .clk(vga_clk),
+        .rst,
+
+        .char_pixels(e_char_pixels),
+        .char_line(e_char_line),
+        .char_xy(e_char_xy),
+
+        .in(text_my_ships_if),
+        .out(text_e_ships_if)
+    );
+
+    font_rom u_e_font_rom (
+        .clk(vga_clk),
+        .char_line_pixels(e_char_pixels),
+        .addr({e_char_code, e_char_line})
+    );
+
+    char_rom_16x16 #(.TEXT("ENEMY BOARD")) u_char_e_rom_16x16 (
+        .clk(vga_clk),
+        .char_xy(e_char_xy),
+        .char_code(e_char_code)
     );
 
 
@@ -233,7 +265,7 @@ module top_warships (
         .x_pos(mouse_x_pos),
         .y_pos(mouse_y_pos),
 
-        .in(text_my_ships_if),
+        .in(text_e_ships_if),
         .out(mouse_if)
     );
 
