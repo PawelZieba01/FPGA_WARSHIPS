@@ -185,6 +185,7 @@ module top_warships (
     );
     
     //----------------------------------DRAW TEXT (MY BOARD)--------------------------------------------
+    // for ready project - change text position - issue from e800570 commit
     draw_rect_char #(.X_POS(100), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_my_ships (
         .clk(vga_clk),
         .rst,
@@ -210,6 +211,7 @@ module top_warships (
     );
 
     //----------------------------------DRAW TEXT (ENEMY BOARD)--------------------------------------------
+    // for ready project - change text position - issue from e800570 commit
     draw_rect_char #(.X_POS(538), .Y_POS(172), .TEXT_SIZE(1)) u_draw_text_enemy_ships (
         .clk(vga_clk),
         .rst,
