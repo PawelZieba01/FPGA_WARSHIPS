@@ -88,7 +88,7 @@ module draw_rect_char
             rgb_nxt = 12'b0_0_0;
         end
         else begin
-            if((vga_delayed.hcount >= X_POS && vga_delayed.hcount < FONT_RECT_WIDTH + X_POS)    &&    (vga_delayed.vcount >= Y_POS && vga_delayed.vcount < FONT_RECT_HEIGHT + Y_POS))   begin
+            if((vga_delayed.hcount >= X_POS && vga_delayed.hcount < (FONT_RECT_WIDTH<<TEXT_SIZE) + X_POS)    &&    (vga_delayed.vcount >= Y_POS && vga_delayed.vcount < (FONT_RECT_HEIGHT<<TEXT_SIZE) + Y_POS))   begin
                 if(char_pixels[CHAR_BIT_LENGTH-1 - pixel_in_line] == 1'b1) begin
                     rgb_nxt = TEXT_COLOR;
                 end
