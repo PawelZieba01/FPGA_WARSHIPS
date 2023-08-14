@@ -58,7 +58,7 @@
          .out(bg_if)
      );
  
-     draw_grid #(.X_POS(100), .Y_POS(100))
+     draw_grid #(.X_POS(3), .Y_POS(3))
          u_draw_ships(
             .clk(vga_clk),
             .rst,
