@@ -37,6 +37,7 @@ module top_warships (
     //start button signals
     logic [11:0] rgb_pixel_start_btn;
     logic [13:0] rgb_pixel_addr_start_btn;
+    logic  start_btn_enable;
 
     //my board memory and draw ships signals
     logic [7:0] my_board_read_addr, my_board_write_addr;
@@ -94,6 +95,7 @@ module top_warships (
     u_draw_start_btn(
         .clk(vga_clk),
         .rst,
+        .enable(1'b1),
         .x_pos(12'd448),
         .y_pos(12'd40),
         .in(bg_if),
