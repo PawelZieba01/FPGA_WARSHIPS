@@ -17,6 +17,8 @@ module draw_rect #( parameter
     input logic clk,
     input logic rst,
 
+    input logic enable,
+
     input logic [11:0] x_pos,
     input logic [11:0] y_pos,
 
@@ -112,7 +114,8 @@ module draw_rect #( parameter
             if((hcount_nxt2 >= x_pos_sync)                 &&
              (hcount_nxt2 < x_pos_sync + RECT_WIDTH)       &&
              (vcount_nxt2 >= y_pos_sync)                   &&
-             (vcount_nxt2 < y_pos_sync + RECT_HEIGHT))     begin : rect_area_blk
+             (vcount_nxt2 < y_pos_sync + RECT_HEIGHT)      &&
+             (enable == 1'b1))     begin : rect_area_blk
                 rgb_out_nxt = rgb_pixel;
             end
             else begin
