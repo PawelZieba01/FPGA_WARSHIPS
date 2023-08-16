@@ -26,6 +26,7 @@ sv work ../../rtl/vga/vga_pkg.sv \
         ../common/tiff_writer.sv \
         ../../rtl/draw_ships.sv \
         ../../rtl/board_mem.sv \
+        ../../rtl/draw_grid.sv \
         top_warships_tb.sv
 
 vhdl work ../../rtl/mouse/MouseCtl.vhd \

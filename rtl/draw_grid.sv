@@ -40,8 +40,8 @@ localparam GRID_BORDER_WIDTH = 2;
  logic [10:0] vcount;
  logic [10:0] hcount;
 
- assign hcount = in.hcount-11'(Y_POS);
- assign vcount = in.vcount-11'(X_POS);
+ assign hcount = in.hcount-11'(X_POS);
+ assign vcount = in.vcount-11'(Y_POS);
  
  
  /**
