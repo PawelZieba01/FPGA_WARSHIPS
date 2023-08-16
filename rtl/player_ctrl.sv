@@ -25,8 +25,10 @@
 
  );
 
-   localparam SBtn_POS = 312;
-   localparam SBtn_WIDITH = 400;
+   localparam SBtn_XPOS = 448;
+   localparam SBtn_YPOS = 40;
+   localparam SBtn_WIDITH = 128;
+   localparam SBtn_HEIGHT = 64;
    localparam GRID_SIZE = 386;
    localparam PLAYER_POS = 100;
    localparam ENEMY_POS = 538;
@@ -42,8 +44,6 @@
          player_cor <= 8'b0;
          enemy_cor <= 8'b0;
       end
-
-   
       else begin
          start_btn <= start_nxt;
          player_cor <= pc_nxt;
@@ -56,7 +56,7 @@
 
       //start button//
       always_comb begin
-         if((x_pos >= SBtn_POS)&&(x_pos <= SBtn_POS+SBtn_WIDITH))begin
+         if((x_pos >= SBtn_XPOS)&&(x_pos <= SBtn_XPOS+SBtn_WIDITH)&&(y_pos >= SBtn_YPOS)&&(x_pos <= SBtn_YPOS+SBtn_HEIGHT))begin
             if(left)begin
                start_nxt = 1;
             end
@@ -72,11 +72,11 @@
       //player board//
       always_comb begin 
          if((x_pos >= PLAYER_POS)&&(x_pos <= PLAYER_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos<= GRID_YPOS+GRID_SIZE))begin
-            pc_nxt = {xpos[8:5],ypos[8:5]};
+            pc_nxt = {x_pos[8:5],y_pos[8:5]};
 
          end
          else begin 
-            pc_nxt = 8'b0;
+            pc_nxt = 8'b1;
          end
       end
       
@@ -84,11 +84,11 @@
       //enemy board//
       always_comb begin
          if((x_pos >= ENEMY_POS)&&(x_pos <= ENEMY_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos <= GRID_YPOS+GRID_SIZE))begin 
-            ec_nxt = {xpos[8:5],ypos[8:5]};
+            ec_nxt = {x_pos[8:5],y_pos[8:5]};
 
          end
          else begin 
-            ec_nxt = 8'b0;
+            ec_nxt = 8'b1;
          end
       end
 
