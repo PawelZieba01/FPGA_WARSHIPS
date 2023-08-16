@@ -56,6 +56,7 @@ set sv_files {
 
     ../rtl/board_mem.sv
     ../rtl/draw_ships.sv
+    ../rtl/draw_grid.sv
 }
 
 # Specify Verilog design files location         -- EDIT

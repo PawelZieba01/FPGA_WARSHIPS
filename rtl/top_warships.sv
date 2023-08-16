@@ -65,6 +65,8 @@ module top_warships (
     vga_if tim_if();
     vga_if bg_if();
     vga_if start_btn_if();
+    vga_if my_grid_if();
+    vga_if enemy_grid_if();
     vga_if my_ships_if();
     vga_if enemy_ships_if();
     vga_if text_my_ships_if();
@@ -127,11 +129,22 @@ module top_warships (
     );    
 
     //-----------------------------------------MY_SHIPS----------------------------------------------
+    draw_grid #(
+        .X_POS(100),
+        .Y_POS(200)
+    )
+    u_draw_my_grid(
+        .clk(vga_clk),
+        .rst,
+        .in(start_btn_if),
+        .out(my_grid_if)
+    );
+
     draw_ships #(.X_POS(100), .Y_POS(200))
         u_draw_my_ships(
             .clk(vga_clk),
             .rst,
-            .in(start_btn_if),
+            .in(my_grid_if),
             .grid_status(my_board_read_data),
             .out(my_ships_if),
             .grid_addr(my_board_read_addr)
@@ -156,11 +169,22 @@ module top_warships (
     );
 
     //---------------------------------------ENEMY_SHIPS--------------------------------------------
+    draw_grid #(
+        .X_POS(538),
+        .Y_POS(200)
+    )
+    u_draw_enemy_grid(
+        .clk(vga_clk),
+        .rst,
+        .in(my_ships_if),
+        .out(enemy_grid_if)
+    );
+
     draw_ships #(.X_POS(538), .Y_POS(200))
         u_draw_enemy_ships(
             .clk(vga_clk),
             .rst,
-            .in(my_ships_if),
+            .in(enemy_grid_if),
             .grid_status(enemy_board_read_data),
             .out(enemy_ships_if),
             .grid_addr(enemy_board_read_addr)

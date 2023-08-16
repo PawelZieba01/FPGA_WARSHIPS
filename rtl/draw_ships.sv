@@ -26,7 +26,7 @@
     localparam GRID_COLUMNS = 12;
     localparam GRID_ELEMENT_HEIGHT = 32;
     localparam GRID_ELEMENT_WIDTH = 32;
-    localparam GRID_BORDER_WIDTH = 1;
+    localparam GRID_BORDER_WIDTH = 2;
 
     localparam GRID_STATUS_EMPTY = 2'b00;
     localparam GRID_STATUS_MYSHIP = 2'b01;
@@ -91,7 +91,8 @@
                         endcase
                     end
                     else begin
-                        rgb_nxt = 12'h0_0_0;    //grid
+                        //rgb_nxt = 12'h0_0_0;    //grid
+                        rgb_nxt = vga_delayed.rgb;
                     end
             end
             else begin
