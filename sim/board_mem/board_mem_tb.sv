@@ -34,11 +34,11 @@ localparam MEM_Y_ADDR_WIDTH = 4;
  * Local variables and signals
  */
 
-logic clk_write, clk_read;
-logic [MEM_Y_ADDR_WIDTH+MEM_X_ADDR_WIDTH-1 : 0] mem_addr_write, mem_addr_read;   
-logic [MEM_DATA_WIDTH-1:0] write_data;
-logic [MEM_DATA_WIDTH-1:0] read_data;
-logic write_enable;
+logic clk1, clk2;
+logic [MEM_Y_ADDR_WIDTH+MEM_X_ADDR_WIDTH-1 : 0] mem_addr1, mem_addr2;   
+logic [MEM_DATA_WIDTH-1:0] write_data1;
+logic [MEM_DATA_WIDTH-1:0] read_data2;
+logic w_nr;
 
 
 
@@ -48,13 +48,13 @@ logic write_enable;
  */
 
 initial begin
-    clk_write = 1'b0;
-    forever #(CLK1_PERIOD/2) clk_write = ~clk_write;
+    clk1 = 1'b0;
+    forever #(CLK1_PERIOD/2) clk1 = ~clk1;
 end
 
 initial begin
-    clk_read = 1'b0;
-    forever #(CLK2_PERIOD/2) clk_read = ~clk_read;
+    clk2 = 1'b0;
+    forever #(CLK2_PERIOD/2) clk2 = ~clk2;
 end
 
 /**
@@ -68,13 +68,13 @@ board_mem #(
     .Y_ADDR_WIDTH(MEM_Y_ADDR_WIDTH),
     .DATA_WIDTH(MEM_DATA_WIDTH)) 
 dut (
-    .write_clk(clk_write),
-    .read_clk(clk_read),
-    .write_addr(mem_addr_write),
-    .read_addr(mem_addr_read),
-    .write_data,
-    .read_data,
-    .write_enable
+    .clk1(clk1),
+    .clk2(clk2),
+    .addr1(mem_addr1),
+    .addr2(mem_addr2),
+    .write_data1,
+    .read_data2,
+    .w_nr
 );
 
 
@@ -82,28 +82,28 @@ dut (
  * Main test
  */
 
- always @(posedge clk_write) begin
-    if(write_enable) begin
-        mem_addr_write++;
-        mem_addr_read++;
-        write_data++;
+ always @(posedge clk1) begin
+    if(w_nr) begin
+        mem_addr1++;
+        mem_addr2++;
+        write_data1++;
     end
  end
 
 
 initial begin
-    write_enable = 1'b0;
-    write_data = '0;
-    mem_addr_read = -1;
-    mem_addr_write = '0;
+    w_nr = 1'b0;
+    write_data1 = '0;
+    mem_addr2 = -1;
+    mem_addr1 = '0;
 
     $display("Simulation start.");
     #100;
     $display("Writting into ram memory.");
-    write_enable = 1'b1;
+    w_nr = 1'b1;
 
-    wait(mem_addr_write == 1);
-    wait(mem_addr_write == 0);
+    wait(mem_addr1 == 1);
+    wait(mem_addr1 == 0);
 
     // End the simulation.
     $display("Simulation is over, check the waveforms.");
