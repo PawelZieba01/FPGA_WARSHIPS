@@ -34,8 +34,8 @@
 	(* ram_style = "block" *)
 	logic [DATA_WIDTH-1 : 0] ram [0:(1<<(Y_ADDR_WIDTH+X_ADDR_WIDTH))-1];
 
-	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_write_addr;
-	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_read_addr;
+	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_addr1;
+	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_addr2;
 
 	assign ram_addr1 	= 	addr1[7:4] + (addr1[3:0])*12;
 	assign ram_addr2	= 	addr2[7:4] + (addr2[3:0])*12;
