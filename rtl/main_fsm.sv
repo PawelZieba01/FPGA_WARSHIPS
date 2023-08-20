@@ -8,11 +8,7 @@
  Description:  Main FSM module for FPGA_WARSHIPS project
  */
 //////////////////////////////////////////////////////////////////////////////
-module main_fsm
-#(parameter
-    MYPARAM = 7
-)
-(
+module main_fsm(
     input  logic  clk,
     input  logic  rst,
 
@@ -177,63 +173,65 @@ end
 always_comb begin : out_comb_blk
     case(state)
         WAIT_FOR_BEGIN:     begin
-            if(my_grid_cords!=8'hff && my_ctr!=0) begin : put_ship_state
+            if(my_grid_cords!=8'hff && my_ctr!=0) begin //put_ship_state
                 my_ctr_nxt = my_ctr-1;
                 my_mem_w_nr_nxt = '1;
                 my_mem_addr_nxt = ship_cords_in;
                 my_mem_data_out_nxt = GRID_STATUS_MYSHIP; 
             end
-            else if(start_btn && my_ctr==0 && ready2==0) begin : wait_for_shot_state
+            else if(start_btn && my_ctr==0 && ready2==0) begin //wait_for_shot_state
                 ready1_nxt = '1;
                 hit1_nxt = '0;
                 my_ctr_nxt = SHIPS_NUMBER;
                 en_ctr_nxt = SHIPS_NUMBER;
 
             end
-            else if(start_btn && my_ctr==0 && ready2==1) begin : wait_for_enemy_state
+            else if(start_btn && my_ctr==0 && ready2==1) begin //wait_for_enemy_state
                 ready1_nxt = '1;
                 hit1_nxt = '0;
                 my_ctr_nxt = SHIPS_NUMBER;
                 en_ctr_nxt = SHIPS_NUMBER;
             end
-            else begin : wait_for_begin_state
+            else begin //wait_for_begin_state
                 ready1_nxt = '0;
             end
         end
 
         PUT_SHIP:           ready1_nxt = '0;
         WAIT_FOR_ENEMY:     begin
-            if(en_ctr==0) begin : win_state
+            if(en_ctr==0) begin //win_state
                 //tutaj zkonczenie gry - win
             end
-            else if(my_ctr==0) begin : loose_state
+            else if(my_ctr==0) begin //loose_state
                 //tutaj zkonczenie gry - loose
             end
-            else if(hit2 && ready2) begin : mem_read_state
+            else if(hit2 && ready2) begin //mem_read_state
                 my_mem_addr_nxt = ship_cords_in;
                 my_mem_w_nr_nxt = '0;
                 ready1_nxt = '0;
             end
-            else begin : wait_for_enemy_state
+            else begin // wait_for_enemy_state
                 ready1_nxt = '1;
                 hit1_nxt = '0;
             end
         end
-        WAIT_FOR_SHOT:      {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, my_grid_cords} : {1'b1, 1'b0, ship_cords_out};
+        WAIT_FOR_SHOT:      {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
         MEM_READ:           ready1_nxt = 1'b0;
         MEM_CHECK:          begin
-                            {hit1_nxt, my_ctr_nxt, my_mem_data_out} = ((my_mem_data_in == GRID_STATUS_MYSHIP) || (my_mem_data_in == GRID_STATUS_HIT)) ? {1'b1, my_ctr-1, GRID_STATUS_HIT} : {1'b0, my_ctr, GRID_STATUS_MISS};
+                            {hit1_nxt, my_ctr_nxt, my_mem_data_out_nxt} = ((my_mem_data_in == GRID_STATUS_MYSHIP) || (my_mem_data_in == GRID_STATUS_HIT)) ? {1'b1, 4'(my_ctr-1), GRID_STATUS_HIT} : {1'b0, my_ctr, GRID_STATUS_MISS};
                             ready1_nxt = 1'b1;
-                            my_mem_addr = ship_cords_in;
-                            my_mem_w_nr = 1'b1;
+                            my_mem_addr_nxt = ship_cords_in;
+                            my_mem_w_nr_nxt = 1'b1;
                             end
-        COMPARE_AND_SAVE:   {ready1_nxt, hit1_nxt, my_mem_w_nr} = ready2 ? {1'b1, 1'b0, 1'b0} : {1'b1, hit1, 1'b0};
+        COMPARE_AND_SAVE:   {ready1_nxt, hit1_nxt, my_mem_w_nr_nxt} = ready2 ? {1'b1, 1'b0, 1'b0} : {1'b1, hit1, 1'b0};
         SHOT:               {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = {1'b1, 1'b1, ship_cords_out};
         WAIT_FOR_ANSWER:    begin
-                            {en_mem_addr_nxt, en_mem_w_nr_nxt, ready1_nxt} = ready2 ? {ship_cords_in, 1'b1, 1'b1} : {en_mem_addr, en_mem_w_nr, ready1};
-                            {en_mem_data_out_nxt, en_ctr_nxt} = hit2 ? {GRID_STATUS_HIT, en_ctr-1} : {GRID_STATUS_MISS, en_ctr};
+                                if(ready2) begin
+                                    {en_mem_addr_nxt, en_mem_w_nr_nxt, ready1_nxt} = {ship_cords_in, 1'b1, 1'b1};
+                                    {en_mem_data_out_nxt, en_ctr_nxt} = hit2 ? {GRID_STATUS_HIT, 4'(en_ctr-1)} : {GRID_STATUS_MISS, en_ctr};
+                                end
                             end
-        SAVE_RESULT:        {ready1_nxt, hit1_nxt} = ready2 ? {1'b1, 1'b0} : {ready1, hit1};
+        SAVE_RESULT:        {ready1_nxt, hit1_nxt, en_mem_w_nr_nxt} = ready2 ? {1'b1, 1'b0, 1'b0} : {ready1, hit1, en_mem_w_nr};
         WIN:                {ready1_nxt, hit1_nxt} = {ready1, hit1};
         LOSE:               {ready1_nxt, hit1_nxt} = {ready1, hit1};
         default:            {ready1_nxt, hit1_nxt} = {ready1, hit1};
