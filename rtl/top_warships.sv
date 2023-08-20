@@ -40,14 +40,14 @@ module top_warships (
     logic  start_btn_enable;
 
     //my board memory and draw ships signals
-    logic [7:0] my_board_read_addr, my_board_write_addr;
-    logic [1:0] my_board_read_data, my_board_write_data;
-    logic my_board_write_enable;
+    logic [7:0] my_board_read_addr, my_board_read_write_addr;
+    logic [1:0] my_board_read_data, my_board_read_write_data;
+    logic my_board_write_nread;
 
     //enemy board memory and draw ships signals
-    logic [7:0] enemy_board_read_addr, enemy_board_write_addr;
-    logic [1:0] enemy_board_read_data, enemy_board_write_data;
-    logic enemy_board_write_enable;
+    logic [7:0] enemy_board_read_addr, enemy_board_read_write_addr;
+    logic [1:0] enemy_board_read_data, enemy_board_read_write_data;
+    logic enemy_board_write_nread;
 
     //text my ships signals
     logic [7:0] ms_char_pixels;
@@ -159,13 +159,13 @@ module top_warships (
     )
     u_my_board_mem
     (
-        .read_clk(vga_clk),
-        .write_clk(control_clk),
-        .read_addr(my_board_read_addr),
-        .write_addr(my_board_write_addr),
-        .read_data(my_board_read_data),
-        .write_data(my_board_write_data),
-        .write_enable(my_board_write_enable)
+        .clk2(vga_clk),
+        .clk1(control_clk),
+        .addr2(my_board_read_addr),
+        .addr1(my_board_read_write_addr),
+        .read_data2(my_board_read_data),
+        .write_data1(my_board_read_write_data),
+        .w_nr(my_board_write_nread)
     );
 
     //---------------------------------------ENEMY_SHIPS--------------------------------------------
@@ -199,13 +199,13 @@ module top_warships (
     )
     u_enemy_board_mem
     (
-        .read_clk(vga_clk),
-        .write_clk(control_clk),
-        .read_addr(enemy_board_read_addr),
-        .write_addr(enemy_board_write_addr),
-        .read_data(enemy_board_read_data),
-        .write_data(enemy_board_write_data),
-        .write_enable(enemy_board_write_enable)
+        .clk2(vga_clk),
+        .clk1(control_clk),
+        .addr2(enemy_board_read_addr),
+        .addr1(enemy_board_read_write_addr),
+        .read_data2(enemy_board_read_data),
+        .write_data1(enemy_board_read_write_data),
+        .w_nr(enemy_board_write_nread)
     );
     
     //----------------------------------DRAW TEXT (MY BOARD)--------------------------------------------

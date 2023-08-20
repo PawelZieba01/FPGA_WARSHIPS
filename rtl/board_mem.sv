@@ -20,33 +20,37 @@
         DATA_WIDTH = 2
 	)
 	(
-        input logic write_clk,
-        input logic read_clk,
-        input logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] write_addr, //[7:4] x_addr, [3:0] y_addr
-        input logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] read_addr,  //[7:4] x_addr, [3:0] y_addr
-        input logic [DATA_WIDTH-1 : 0] write_data,
-        input logic  write_enable,
+        input logic clk1,		//slow_clk
+        input logic clk2,		//fast_clk
+        input logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] addr1,  //[7:4] x_addr, [3:0] y_addr	(addr for slow clk)
+        input logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] addr2,  //[7:4] x_addr, [3:0] y_addr	(addr for fast clk)
+        input logic [DATA_WIDTH-1 : 0] write_data1,
+        input logic  w_nr,										  //write, !read 
 
-        output logic [DATA_WIDTH-1 : 0] read_data
+		output logic [DATA_WIDTH-1 : 0] read_data1,		//read data for slow clk
+        output logic [DATA_WIDTH-1 : 0] read_data2		//read data for fast clk
 	);
 
 	(* ram_style = "block" *)
 	logic [DATA_WIDTH-1 : 0] ram [0:(1<<(Y_ADDR_WIDTH+X_ADDR_WIDTH))-1];
 
-	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_write_addr;
-	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_read_addr;
+	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_addr1;
+	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_addr2;
 
-	assign ram_write_addr 	= 	write_addr[7:4] + (write_addr[3:0])*12;
-	assign ram_read_addr 	= 	read_addr[7:4] + (read_addr[3:0])*12;
+	assign ram_addr1 	= 	addr1[7:4] + (addr1[3:0])*12;
+	assign ram_addr2	= 	addr2[7:4] + (addr2[3:0])*12;
 
-	always_ff @(posedge write_clk) begin : ram_write_blk
-		if (write_enable) begin
-			ram [ram_write_addr] <= write_data;
+	always_ff @(posedge clk1) begin : ram_write_nread_blk
+		if (w_nr) begin
+			ram[ram_addr1] <= write_data1;
+		end
+		else begin
+			read_data1 <= ram[ram_addr1];
 		end
 	end
 
-    always_ff @(posedge read_clk) begin : ram_read_blk
-		read_data <= ram[ram_read_addr];
+    always_ff @(posedge clk2) begin : ram_read_blk
+		read_data2 <= ram[ram_addr2];
 	end
 
 
