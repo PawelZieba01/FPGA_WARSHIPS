@@ -18,6 +18,18 @@ module top_warships (
     inout logic ps2_clk,
     inout logic ps2_data,
 
+    output logic [3:0] led,
+
+    input logic ready2,
+    input logic hit2,
+    output logic ready1,
+    output logic hit1,
+    input logic [7:0] ship_cords_in,
+    output logic [7:0] ship_cords_out,
+    
+    output logic [6:0] seg,
+    output logic [3:0] an,
+
     output logic vs,
     output logic hs,
     output logic [3:0] r,
