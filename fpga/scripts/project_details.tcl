@@ -58,6 +58,7 @@ set sv_files {
     ../rtl/draw_ships.sv
     ../rtl/draw_grid.sv
     ../rtl/main_fsm.sv
+    ../rtl/player_ctrl.sv
 }
 
 # Specify Verilog design files location         -- EDIT
