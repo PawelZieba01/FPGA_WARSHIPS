@@ -41,8 +41,8 @@
    always_ff @(posedge clk) begin
       if(rst) begin
          start_btn <= 1'b0;
-         player_cor <= 8'b0;
-         enemy_cor <= 8'b0;
+         player_cor <= 8'hff;
+         enemy_cor <= 8'hff;
       end
       else begin
          start_btn <= start_nxt;
@@ -76,7 +76,7 @@
 
          end
          else begin 
-            pc_nxt = 8'b1;
+            pc_nxt = 8'hff;
          end
       end
       
@@ -88,7 +88,7 @@
 
          end
          else begin 
-            ec_nxt = 8'b1;
+            ec_nxt = 8'hff;
          end
       end
 
