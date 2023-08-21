@@ -35,7 +35,9 @@ module main_fsm(
     output  logic  [7:0] ship_cords_out,
 
     output logic [3:0] my_ctr,
-    output logic [3:0] en_ctr
+    output logic [3:0] en_ctr,
+
+    output logic [3:0] state_out
 );
 
 //------------------------------------------------------------------------------
@@ -77,6 +79,8 @@ enum logic [STATE_BITS-1 :0] {
     WIN                 = 4'b1111,
     LOSE                = 4'b1110
 } state, state_nxt;
+
+assign state_out = state;
 
 //------------------------------------------------------------------------------
 // state sequential with synchronous reset
@@ -189,7 +193,7 @@ always_comb begin : out_comb_blk
             if(my_grid_cords!=8'hff && my_ctr!=0) begin //put_ship_state
                 my_ctr_nxt = my_ctr-1;
                 my_mem_w_nr_nxt = '1;
-                my_mem_addr_nxt = ship_cords_in;
+                my_mem_addr_nxt = my_grid_cords;
                 my_mem_data_out_nxt = GRID_STATUS_MYSHIP; 
             end
             else if(start_btn && my_ctr==0 && ready2==0) begin //wait_for_shot_state
@@ -210,7 +214,7 @@ always_comb begin : out_comb_blk
             end
         end
 
-        PUT_SHIP:           ready1_nxt = '0;
+        PUT_SHIP:           {ready1_nxt, my_mem_w_nr_nxt} = {1'b0, 1'b0};
         WAIT_FOR_ENEMY:     begin
             if(en_ctr==0) begin //win_state
                 //tutaj zkonczenie gry - win

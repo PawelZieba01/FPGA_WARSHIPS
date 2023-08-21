@@ -82,6 +82,13 @@ module top_warships (
 
     //coordinates signals from player_ctrl
     logic [7:0] my_grid_cords, en_grid_cords;
+
+    //fsm state for debug
+    logic [3:0] state_fsm;
+
+    //led debug
+    assign led[3:0] = state_fsm;
+    assign led[11:4] = my_grid_cords;
     
     // VGA interfaces
     vga_if tim_if();
@@ -135,7 +142,9 @@ module top_warships (
 
         .ship_cords_in,
         .ship_cords_out,
-        .start_btn
+        .start_btn,
+
+        .state_out(state_fsm)
     );
 
     //----------------------------------------PLAYER CONTROL--------------------------------------------
