@@ -171,6 +171,19 @@ end
 // output logic
 //------------------------------------------------------------------------------
 always_comb begin : out_comb_blk
+    my_ctr_nxt = my_ctr;
+    en_ctr_nxt = en_ctr;
+    my_mem_data_out_nxt = my_mem_data_out;
+    en_mem_data_out_nxt = en_mem_data_out;
+    my_mem_w_nr_nxt = my_mem_w_nr;
+    en_mem_w_nr_nxt = en_mem_w_nr;
+    my_mem_addr_nxt = my_mem_addr;
+    en_mem_addr_nxt = en_mem_addr;
+    ship_cords_out_nxt = ship_cords_out;
+    ready1_nxt = ready1;
+    hit1_nxt = hit1;
+
+
     case(state)
         WAIT_FOR_BEGIN:     begin
             if(my_grid_cords!=8'hff && my_ctr!=0) begin //put_ship_state
@@ -239,3 +252,17 @@ always_comb begin : out_comb_blk
 end
 
 endmodule
+
+/*
+ * my_ctr_nxt = my_ctr;
+            en_ctr_nxt = en_ctr;
+            my_mem_data_out_nxt = my_mem_data_out;
+            en_mem_data_out_nxt = en_mem_data_out;
+            my_mem_w_nr_nxt = my_mem_w_nr;
+            en_mem_w_nr_nxt = en_mem_w_nr;
+            my_mem_addr_nxt = my_mem_addr;
+            en_mem_addr_nxt = en_mem_addr;
+            ship_cords_out_nxt = ship_cords_out;
+            ready1_nxt = ready1;
+            hit1_nxt = hit1;
+*/
