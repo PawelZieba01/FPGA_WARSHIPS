@@ -18,7 +18,7 @@ module top_warships (
     inout logic ps2_clk,
     inout logic ps2_data,
 
-    output logic [3:0] led,
+    output logic [15:0] led,
 
     input logic ready2,
     input logic hit2,

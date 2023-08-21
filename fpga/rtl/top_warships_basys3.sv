@@ -29,7 +29,7 @@ module top_warships_basys3 (
     output logic [3:0] vgaGreen,
     output logic [3:0] vgaBlue,
     
-    output logic [3:0] led,
+    output logic [15:0] led,
 
     input logic [1:0] JA_in,
     output logic [1:0] JA_out,
