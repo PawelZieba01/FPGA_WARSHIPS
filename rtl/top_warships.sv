@@ -79,6 +79,9 @@ module top_warships (
 
     //start btn signal
     logic start_btn;
+
+    //coordinates signals from player_ctrl
+    logic [7:0] my_grid_cords, en_grid_cords;
     
     // VGA interfaces
     vga_if tim_if();
@@ -105,20 +108,20 @@ module top_warships (
     /**
      * Submodules instances
      */
-    //----------------------------------------TIMMING--------------------------------------------
+    //----------------------------------------MAIN_FSM--------------------------------------------
     main_fsm u_main_fsm(
         .clk(control_clk),
         .rst,
         .en_ctr,
         .my_ctr,
 
-        .en_grid_cords(),
+        .en_grid_cords,
         .en_mem_addr(enemy_board_read1_write1_addr),
         .en_mem_data_in(enemy_board_read1_data),
         .en_mem_data_out(enemy_board_write1_data),
         .en_mem_w_nr(enemy_board_write_nread),
         
-        .my_grid_cords(),
+        .my_grid_cords,
         .my_mem_addr(my_board_read1_write1_addr),
         .my_mem_data_in(my_board_read1_data),
         .my_mem_data_out(my_board_write1_data),
@@ -134,6 +137,19 @@ module top_warships (
         .ship_cords_out,
         .start_btn
     );
+
+    //----------------------------------------TIMMING--------------------------------------------
+    player_ctrl u_player_ctrl(
+        .clk(control_clk),
+        .rst,
+        .enemy_cor(en_grid_cords),
+        .player_cor(my_grid_cords),
+        .start_btn,
+        .left(mouse_left),
+        .x_pos(mouse_x_pos),
+        .y_pos(mouse_y_pos)
+    );
+
 
     //----------------------------------------TIMMING--------------------------------------------
     vga_timing u_vga_timing (
