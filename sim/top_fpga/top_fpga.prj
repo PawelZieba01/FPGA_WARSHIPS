@@ -29,6 +29,7 @@ sv work ../../rtl/vga/vga_pkg.sv \
         ../../rtl/board_mem.sv \
         top_fpga_tb.sv \
         ../../rtl/draw_ships.sv \
+        ../../rtl/main_fsm.sv \
         ../../fpga/rtl/top_warships_basys3.sv
 
 vhdl work ../../rtl/mouse/MouseCtl.vhd \

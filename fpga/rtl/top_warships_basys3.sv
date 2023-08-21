@@ -52,7 +52,6 @@ module top_warships_basys3 (
 logic locked;
 logic clk_65MHz;
 logic clk_65MHz_mirror;
-logic clk_50MHz;
 logic clk_10MHz;
 
 (* KEEP = "TRUE" *)
