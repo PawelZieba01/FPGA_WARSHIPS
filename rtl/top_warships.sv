@@ -44,7 +44,7 @@ module top_warships (
 
     //mouse signals
     logic [11:0] mouse_x_pos, mouse_y_pos;
-    logic mouse_left;
+    logic mouse_left, mouse_left_db;
 
     //start button signals
     logic [11:0] rgb_pixel_start_btn;
@@ -368,6 +368,14 @@ module top_warships (
 
         .in(text_e_ships_if),
         .out(mouse_if)
+    );
+
+    debounce u_mouse_debounce(
+        .clk(control_clk),
+        .reset(rst),
+        .sw(mouse_left),
+        .db_level(),
+        .db_tick(mouse_left_db)
     );
 
 
