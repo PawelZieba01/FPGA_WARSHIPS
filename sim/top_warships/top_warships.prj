@@ -28,6 +28,7 @@ sv work ../../rtl/vga/vga_pkg.sv \
         ../../rtl/board_mem.sv \
         ../../rtl/draw_grid.sv \
         ../../rtl/main_fsm.sv \
+        ../../rtl/player_ctrl.sv \
         top_warships_tb.sv
 
 vhdl work ../../rtl/mouse/MouseCtl.vhd \
@@ -36,4 +37,5 @@ vhdl work ../../rtl/mouse/MouseCtl.vhd \
 
 
 verilog work    ../../rtl/rect_char/font_rom.v \
-                ../../rtl/common/delay.v
+                ../../rtl/common/delay.v \
+                ../../rtl/common/debounce.v
