@@ -56,12 +56,12 @@
 
       //start button//
       always_comb begin
-         if((x_pos >= SBtn_XPOS)&&(x_pos <= SBtn_XPOS+SBtn_WIDITH)&&(y_pos >= SBtn_YPOS)&&(x_pos <= SBtn_YPOS+SBtn_HEIGHT))begin
+         if((x_pos >= SBtn_XPOS)&&(x_pos < SBtn_XPOS+SBtn_WIDITH)&&(y_pos >= SBtn_YPOS)&&(y_pos < SBtn_YPOS+SBtn_HEIGHT))begin
             if(left)begin
-               start_nxt = 1;
+               start_nxt = 1'b1;
             end
             else begin 
-               start_nxt = 0;
+               start_nxt = 1'b0;
             end
          end
          else begin
