@@ -22,7 +22,7 @@ module top_warships (
     output logic hs,
     output logic [3:0] r,
     output logic [3:0] g,
-    output logic [3:0] b
+    output logic [3:0] b,
 );
 
 
@@ -294,6 +294,18 @@ module top_warships (
         .in(text_e_ships_if),
         .out(mouse_if)
     );
+
+//--------------------------------------------main state machine----------------------------------------//
+
+
+//---------------------------------------------seven seq display---------------------------------------//
+    disp_hex_mux u_disp_hex_mux(
+    .clk(vga_clk),
+    .rst,
+    .num_1,
+    .num_2,
+    .sseg
+   );
 
 
 endmodule
