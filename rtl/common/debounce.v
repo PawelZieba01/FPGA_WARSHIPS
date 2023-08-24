@@ -14,7 +14,7 @@ module debounce
                wait1 = 2'b11;
 
    // number of counter bits (2^N * 20ns = 40ms)
-   localparam N=21;
+   localparam N=15;
 
    // signal declaration
    reg [N-1:0] q_reg, q_next;
