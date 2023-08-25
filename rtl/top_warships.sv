@@ -252,6 +252,7 @@ module top_warships (
     )
     u_my_board_mem
     (
+        .rst,
         .clk2(vga_clk),
         .clk1(control_clk),
         .addr2(my_board_read2_addr),
@@ -293,6 +294,7 @@ module top_warships (
     )
     u_enemy_board_mem
     (
+        .rst,
         .clk2(vga_clk),
         .clk1(control_clk),
         .addr2(enemy_board_read2_addr),
