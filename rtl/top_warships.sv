@@ -23,6 +23,8 @@ module top_warships (
     output logic [3:0] r,
     output logic [3:0] g,
     output logic [3:0] b,
+    output logic [6:0]sseg,
+    output logic [3:0]an
 );
 
 
@@ -60,6 +62,14 @@ module top_warships (
     logic [3:0] e_char_line;
     logic [7:0] e_char_xy;
     logic [6:0] e_char_code;
+
+    //7seg display signals
+
+    logic [3:0]num_1 ;
+    logic [3:0]num_2 ;
+
+    assign num_1 = 12;
+    assign num_2 = 4;
     
     // VGA interfaces
     vga_if tim_if();
@@ -304,8 +314,7 @@ module top_warships (
     .rst,
     .num_1,
     .num_2,
-    .sseg
+    .sseg,
+    .an
    );
-
-
 endmodule

@@ -26,6 +26,8 @@ module top_warships_basys3 (
     output wire [3:0] vgaRed,
     output wire [3:0] vgaGreen,
     output wire [3:0] vgaBlue,
+    output wire [6:0] seg,
+    output wire [3:0] an,
     output wire JA1,
     inout wire PS2Clk,
     inout wire PS2Data
@@ -93,7 +95,9 @@ top_warships u_top_warships (
     .g(vgaGreen),
     .b(vgaBlue),
     .hs(Hsync),
-    .vs(Vsync)
+    .vs(Vsync),
+    .sseg(seg),
+    .an
 );
 
 endmodule
