@@ -114,7 +114,7 @@ top_warships u_top_warships (
     .ready1(JA_out[1]),
     .hit1(JA_out[0]),
 
-    .ship_cords_in(JB),
+    .ship_cords_in({JB[4], JB[5], JB[6], JB[7], JB[0], JB[1], JB[2], JB[3]}),
     .ship_cords_out(JC),
 
     .seg,

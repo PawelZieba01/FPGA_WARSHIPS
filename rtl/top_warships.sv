@@ -44,12 +44,13 @@ module top_warships (
 
     //mouse signals
     logic [11:0] mouse_x_pos, mouse_y_pos;
-    logic mouse_left;
+    logic mouse_left, mouse_left_db;
 
     //start button signals
     logic [11:0] rgb_pixel_start_btn;
     logic [13:0] rgb_pixel_addr_start_btn;
-    logic  start_btn_enable;
+    logic  start_btn;
+    logic  start_btn_en;
 
     //my board memory and draw ships signals
     logic [7:0] my_board_read2_addr, my_board_read1_write1_addr;
@@ -77,11 +78,21 @@ module top_warships (
     logic [3:0] en_ctr;
     logic [3:0] my_ctr;
 
-    //start btn signal
-    logic start_btn;
+
 
     //coordinates signals from player_ctrl
     logic [7:0] my_grid_cords, en_grid_cords;
+
+    //fsm state for debug
+    logic [3:0] state_fsm;
+
+    //led debug
+    assign led[3:0] = state_fsm;
+    assign led[11:4] = 8'(my_ctr);
+    assign led[15] = start_btn_en;
+    assign led[14] = start_btn;
+    assign led[13] = mouse_left;
+    assign led[12] = ready2;
     
     // VGA interfaces
     vga_if tim_if();
@@ -135,17 +146,20 @@ module top_warships (
 
         .ship_cords_in,
         .ship_cords_out,
-        .start_btn
+        .start_btn,
+        .start_btn_en,
+
+        .state_out(state_fsm)
     );
 
-    //----------------------------------------TIMMING--------------------------------------------
+    //----------------------------------------PLAYER CONTROL--------------------------------------------
     player_ctrl u_player_ctrl(
         .clk(control_clk),
         .rst,
         .enemy_cor(en_grid_cords),
         .player_cor(my_grid_cords),
         .start_btn,
-        .left(mouse_left),
+        .left(mouse_left_db),
         .x_pos(mouse_x_pos),
         .y_pos(mouse_y_pos)
     );
@@ -175,7 +189,7 @@ module top_warships (
     u_draw_start_btn(
         .clk(vga_clk),
         .rst,
-        .enable(1'b1),
+        .enable(start_btn_en),
         .x_pos(12'd448),
         .y_pos(12'd40),
         .in(bg_if),
@@ -359,6 +373,14 @@ module top_warships (
 
         .in(text_e_ships_if),
         .out(mouse_if)
+    );
+
+    debounce u_mouse_debounce(
+        .clk(control_clk),
+        .reset(rst),
+        .sw(mouse_left),
+        .db_level(),
+        .db_tick(mouse_left_db)
     );
 
 

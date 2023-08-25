@@ -63,6 +63,7 @@ set sv_files {
 
 # Specify Verilog design files location         -- EDIT
 set verilog_files {
+    ../rtl/common/debounce.v
     rtl/clk_wiz_0_clk_wiz.v
     rtl/clk_wiz_0.v
     ../rtl/common/delay.v

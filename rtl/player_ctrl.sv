@@ -41,8 +41,8 @@
    always_ff @(posedge clk) begin
       if(rst) begin
          start_btn <= 1'b0;
-         player_cor <= 8'b0;
-         enemy_cor <= 8'b0;
+         player_cor <= 8'hff;
+         enemy_cor <= 8'hff;
       end
       else begin
          start_btn <= start_nxt;
@@ -56,12 +56,12 @@
 
       //start button//
       always_comb begin
-         if((x_pos >= SBtn_XPOS)&&(x_pos <= SBtn_XPOS+SBtn_WIDITH)&&(y_pos >= SBtn_YPOS)&&(x_pos <= SBtn_YPOS+SBtn_HEIGHT))begin
+         if((x_pos >= SBtn_XPOS)&&(x_pos < SBtn_XPOS+SBtn_WIDITH)&&(y_pos >= SBtn_YPOS)&&(y_pos < SBtn_YPOS+SBtn_HEIGHT))begin
             if(left)begin
-               start_nxt = 1;
+               start_nxt = 1'b1;
             end
             else begin 
-               start_nxt = 0;
+               start_nxt = 1'b0;
             end
          end
          else begin
@@ -76,7 +76,7 @@
 
          end
          else begin 
-            pc_nxt = 8'b1;
+            pc_nxt = 8'hff;
          end
       end
       
@@ -88,7 +88,7 @@
 
          end
          else begin 
-            ec_nxt = 8'b1;
+            ec_nxt = 8'hff;
          end
       end
 
