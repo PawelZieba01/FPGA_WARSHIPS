@@ -29,6 +29,8 @@ sv work ../../rtl/vga/vga_pkg.sv \
         ../../rtl/board_mem.sv \
         top_fpga_tb.sv \
         ../../rtl/draw_ships.sv \
+        ../../rtl/main_fsm.sv \
+        ../../rtl/player_ctrl.sv \
         ../../fpga/rtl/top_warships_basys3.sv
 
 vhdl work ../../rtl/mouse/MouseCtl.vhd \
@@ -40,5 +42,6 @@ verilog work ../common/glbl.v \
                 ../../fpga/rtl/clk_wiz_0.v \
                 ../../fpga/rtl/clk_wiz_0_clk_wiz.v \
                 ../../rtl/rect_char/font_rom.v \
-                ../../rtl/common/delay.v
+                ../../rtl/common/delay.v \
+                ../../rtl/common/debounce.v
 

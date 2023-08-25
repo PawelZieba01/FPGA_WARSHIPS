@@ -19,18 +19,29 @@
 `timescale 1 ns / 1 ps
 
 module top_warships_basys3 (
-    input  wire clk,
-    input  wire btnC,
-    output wire Vsync,
-    output wire Hsync,
-    output wire [3:0] vgaRed,
-    output wire [3:0] vgaGreen,
-    output wire [3:0] vgaBlue,
-    output wire [6:0] seg,
-    output wire [3:0] an,
-    output wire JA1,
-    inout wire PS2Clk,
-    inout wire PS2Data
+    input  logic clk,
+
+    input  logic btnC,
+
+    output logic Vsync,
+    output logic Hsync,
+    output logic [3:0] vgaRed,
+    output logic [3:0] vgaGreen,
+    output logic [3:0] vgaBlue,
+    
+    output logic [15:0] led,
+
+    input logic [1:0] JA_in,
+    output logic [1:0] JA_out,
+    input logic [7:0] JB,
+    output logic [7:0] JC,
+    output logic JA1,
+
+    output logic [6:0] seg,
+    output logic [3:0] an,
+
+    inout logic PS2Clk,
+    inout logic PS2Data
 );
 
 
@@ -38,11 +49,10 @@ module top_warships_basys3 (
  * Local variables and signals
  */
 
-wire locked;
-wire clk_65MHz;
-wire clk_65MHz_mirror;
-wire clk_50MHz;
-wire clk_10MHz;
+logic locked;
+logic clk_65MHz;
+logic clk_65MHz_mirror;
+logic clk_10MHz;
 
 (* KEEP = "TRUE" *)
 (* ASYNC_REG = "TRUE" *)
@@ -96,7 +106,18 @@ top_warships u_top_warships (
     .b(vgaBlue),
     .hs(Hsync),
     .vs(Vsync),
+    .led,
+
+    .ready2(JA_in[0]),
+    .hit2(JA_in[1]),
+    .ready1(JA_out[1]),
+    .hit1(JA_out[0]),
+
+    .ship_cords_in({JB[4], JB[5], JB[6], JB[7], JB[0], JB[1], JB[2], JB[3]}),
+    .ship_cords_out(JC),
+
     .sseg(seg),
+
     .an
 );
 

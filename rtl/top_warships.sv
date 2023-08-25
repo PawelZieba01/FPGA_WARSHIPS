@@ -18,13 +18,23 @@ module top_warships (
     inout logic ps2_clk,
     inout logic ps2_data,
 
+    output logic [15:0] led,
+
+    input logic ready2,
+    input logic hit2,
+    output logic ready1,
+    output logic hit1,
+    input logic [7:0] ship_cords_in,
+    output logic [7:0] ship_cords_out,
+    
+    output logic [6:0] sseg,
+    output logic [3:0] an,
+
     output logic vs,
     output logic hs,
     output logic [3:0] r,
     output logic [3:0] g,
-    output logic [3:0] b,
-    output logic [6:0]sseg,
-    output logic [3:0]an
+    output logic [3:0] b
 );
 
 
@@ -34,42 +44,70 @@ module top_warships (
 
     //mouse signals
     logic [11:0] mouse_x_pos, mouse_y_pos;
-    logic mouse_left;
+    logic mouse_left, mouse_left_db;
 
+  
     //start button signals
     logic [11:0] rgb_pixel_start_btn;
     logic [13:0] rgb_pixel_addr_start_btn;
-    logic  start_btn_enable;
+    logic  start_btn;
+    logic  start_btn_en;
 
+  
     //my board memory and draw ships signals
-    logic [7:0] my_board_read_addr, my_board_write_addr;
-    logic [1:0] my_board_read_data, my_board_write_data;
-    logic my_board_write_enable;
+    logic [7:0] my_board_read2_addr, my_board_read1_write1_addr;
+    logic [1:0] my_board_read2_data, my_board_read1_data, my_board_write1_data;
+    logic my_board_write_nread;
 
+  
     //enemy board memory and draw ships signals
-    logic [7:0] enemy_board_read_addr, enemy_board_write_addr;
-    logic [1:0] enemy_board_read_data, enemy_board_write_data;
-    logic enemy_board_write_enable;
+    logic [7:0] enemy_board_read2_addr, enemy_board_read1_write1_addr;
+    logic [1:0] enemy_board_read2_data, enemy_board_read1_data, enemy_board_write1_data;
+    logic enemy_board_write_nread;
 
+  
     //text my ships signals
     logic [7:0] ms_char_pixels;
     logic [3:0] ms_char_line;
     logic [7:0] ms_char_xy;
     logic [6:0] ms_char_code;
 
+  
     //text ENEMY ships signals
     logic [7:0] e_char_pixels;
     logic [3:0] e_char_line;
     logic [7:0] e_char_xy;
     logic [6:0] e_char_code;
 
-    //7seg display signals
+  
+    //ship counters
+    logic [3:0] en_ctr;
+    logic [3:0] my_ctr;
 
+  
+    //coordinates signals from player_ctrl
+    logic [7:0] my_grid_cords, en_grid_cords;
+
+  
+    //fsm state for debug
+    logic [3:0] state_fsm;
+
+  
+    //led debug
+    assign led[3:0] = state_fsm;
+    assign led[11:4] = 8'(my_ctr);
+    assign led[15] = start_btn_en;
+    assign led[14] = start_btn;
+    assign led[13] = mouse_left;
+    assign led[12] = ready2;
+  
+  
+    //7seg display signals
     logic [3:0]num_1 ;
     logic [3:0]num_2 ;
-
     assign num_1 = 12;
     assign num_2 = 4;
+
     
     // VGA interfaces
     vga_if tim_if();
@@ -96,6 +134,51 @@ module top_warships (
     /**
      * Submodules instances
      */
+    //----------------------------------------MAIN_FSM--------------------------------------------
+    main_fsm u_main_fsm(
+        .clk(control_clk),
+        .rst,
+        .en_ctr,
+        .my_ctr,
+
+        .en_grid_cords,
+        .en_mem_addr(enemy_board_read1_write1_addr),
+        .en_mem_data_in(enemy_board_read1_data),
+        .en_mem_data_out(enemy_board_write1_data),
+        .en_mem_w_nr(enemy_board_write_nread),
+        
+        .my_grid_cords,
+        .my_mem_addr(my_board_read1_write1_addr),
+        .my_mem_data_in(my_board_read1_data),
+        .my_mem_data_out(my_board_write1_data),
+        .my_mem_w_nr(my_board_write_nread),
+
+        .ready1,
+        .ready2,
+
+        .hit1,
+        .hit2,
+
+        .ship_cords_in,
+        .ship_cords_out,
+        .start_btn,
+        .start_btn_en,
+
+        .state_out(state_fsm)
+    );
+
+    //----------------------------------------PLAYER CONTROL--------------------------------------------
+    player_ctrl u_player_ctrl(
+        .clk(control_clk),
+        .rst,
+        .enemy_cor(en_grid_cords),
+        .player_cor(my_grid_cords),
+        .start_btn,
+        .left(mouse_left_db),
+        .x_pos(mouse_x_pos),
+        .y_pos(mouse_y_pos)
+    );
+
 
     //----------------------------------------TIMMING--------------------------------------------
     vga_timing u_vga_timing (
@@ -121,7 +204,7 @@ module top_warships (
     u_draw_start_btn(
         .clk(vga_clk),
         .rst,
-        .enable(1'b1),
+        .enable(start_btn_en),
         .x_pos(12'd448),
         .y_pos(12'd40),
         .in(bg_if),
@@ -155,9 +238,9 @@ module top_warships (
             .clk(vga_clk),
             .rst,
             .in(my_grid_if),
-            .grid_status(my_board_read_data),
+            .grid_status(my_board_read2_data),
             .out(my_ships_if),
-            .grid_addr(my_board_read_addr)
+            .grid_addr(my_board_read2_addr)
         );
 
     board_mem #(
@@ -169,13 +252,14 @@ module top_warships (
     )
     u_my_board_mem
     (
-        .read_clk(vga_clk),
-        .write_clk(control_clk),
-        .read_addr(my_board_read_addr),
-        .write_addr(my_board_write_addr),
-        .read_data(my_board_read_data),
-        .write_data(my_board_write_data),
-        .write_enable(my_board_write_enable)
+        .clk2(vga_clk),
+        .clk1(control_clk),
+        .addr2(my_board_read2_addr),
+        .addr1(my_board_read1_write1_addr),
+        .read_data2(my_board_read2_data),
+        .write_data1(my_board_write1_data),
+        .read_data1(my_board_read1_data),
+        .w_nr(my_board_write_nread)
     );
 
     //---------------------------------------ENEMY_SHIPS--------------------------------------------
@@ -195,9 +279,9 @@ module top_warships (
             .clk(vga_clk),
             .rst,
             .in(enemy_grid_if),
-            .grid_status(enemy_board_read_data),
+            .grid_status(enemy_board_read2_data),
             .out(enemy_ships_if),
-            .grid_addr(enemy_board_read_addr)
+            .grid_addr(enemy_board_read2_addr)
         );
 
     board_mem #(
@@ -209,13 +293,14 @@ module top_warships (
     )
     u_enemy_board_mem
     (
-        .read_clk(vga_clk),
-        .write_clk(control_clk),
-        .read_addr(enemy_board_read_addr),
-        .write_addr(enemy_board_write_addr),
-        .read_data(enemy_board_read_data),
-        .write_data(enemy_board_write_data),
-        .write_enable(enemy_board_write_enable)
+        .clk2(vga_clk),
+        .clk1(control_clk),
+        .addr2(enemy_board_read2_addr),
+        .addr1(enemy_board_read1_write1_addr),
+        .read_data2(enemy_board_read2_data),
+        .write_data1(enemy_board_write1_data),
+        .read_data1(enemy_board_read1_data),
+        .w_nr(enemy_board_write_nread)
     );
     
     //----------------------------------DRAW TEXT (MY BOARD)--------------------------------------------
@@ -305,10 +390,16 @@ module top_warships (
         .out(mouse_if)
     );
 
-//--------------------------------------------main state machine----------------------------------------//
+    debounce u_mouse_debounce(
+        .clk(control_clk),
+        .reset(rst),
+        .sw(mouse_left),
+        .db_level(),
+        .db_tick(mouse_left_db)
+    );
 
 
-//---------------------------------------------seven seq display---------------------------------------//
+//---------------------------------------------7_SEG DISPLAY---------------------------------------//
     disp_hex_mux u_disp_hex_mux(
     .clk(vga_clk),
     .rst,
