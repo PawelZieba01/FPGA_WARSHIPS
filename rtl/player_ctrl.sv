@@ -38,6 +38,14 @@
    logic [7:0]pc_nxt;
    logic [7:0]ec_nxt;
 
+   logic [11:0]xpos_enemy;
+   logic [11:0]xpos_player;
+   logic [11:0]ypos;
+
+   assign xpos_player = x_pos +  PLAYER_POS;
+   assign xpos_enemy = x_pos + ENEMY_POS;
+   assign ypos = y_pos + GRID_YPOS;
+
    always_ff @(posedge clk) begin
       if(rst) begin
          start_btn <= 1'b0;
@@ -48,8 +56,6 @@
          start_btn <= start_nxt;
          player_cor <= pc_nxt;
          enemy_cor <= ec_nxt;
-
-
       end
 
       end
@@ -71,9 +77,8 @@
 
       //player board//
       always_comb begin 
-         if((x_pos >= PLAYER_POS)&&(x_pos <= PLAYER_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos<= GRID_YPOS+GRID_SIZE))begin
-            pc_nxt = {x_pos[8:5],y_pos[8:5]};
-
+         if((x_pos >= PLAYER_POS)&&(x_pos <= PLAYER_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos<= GRID_YPOS+GRID_SIZE)&&(left))begin
+            pc_nxt = {xpos_player[8:5],ypos[8:5]};
          end
          else begin 
             pc_nxt = 8'hff;
@@ -83,9 +88,8 @@
 
       //enemy board//
       always_comb begin
-         if((x_pos >= ENEMY_POS)&&(x_pos <= ENEMY_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos <= GRID_YPOS+GRID_SIZE))begin 
-            ec_nxt = {x_pos[8:5],y_pos[8:5]};
-
+         if((x_pos >= ENEMY_POS)&&(x_pos <= ENEMY_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos <= GRID_YPOS+GRID_SIZE)&&(left))begin 
+            ec_nxt = {xpos_player[8:5],ypos[8:5]};
          end
          else begin 
             ec_nxt = 8'hff;
