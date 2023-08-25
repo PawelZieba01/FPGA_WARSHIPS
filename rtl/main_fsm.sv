@@ -266,7 +266,7 @@ always_comb begin : out_comb_blk
         SHOT:               {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = {1'b1, 1'b1, ship_cords_out};
         WAIT_FOR_ANSWER:    begin
                                 if(ready2) begin
-                                    {en_mem_addr_nxt, en_mem_w_nr_nxt, ready1_nxt} = {ship_cords_in, 1'b1, 1'b1};
+                                    {en_mem_addr_nxt, en_mem_w_nr_nxt, ready1_nxt} = {ship_cords_out, 1'b1, 1'b1};
                                     {en_mem_data_out_nxt, en_ctr_nxt} = hit2 ? {GRID_STATUS_HIT, 4'(en_ctr-1)} : {GRID_STATUS_MISS, en_ctr};
                                 end
                             end

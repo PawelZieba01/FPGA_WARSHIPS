@@ -105,8 +105,8 @@ module top_warships (
     //7seg display signals
     logic [3:0]num_1 ;
     logic [3:0]num_2 ;
-    assign num_1 = 12;
-    assign num_2 = 4;
+    assign num_1 = ship_cords_out[7:4];
+    assign num_2 = ship_cords_out[3:0];
 
     
     // VGA interfaces
