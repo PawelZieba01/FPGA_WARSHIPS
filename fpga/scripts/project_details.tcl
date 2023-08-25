@@ -57,6 +57,7 @@ set sv_files {
     ../rtl/board_mem.sv
     ../rtl/draw_ships.sv
     ../rtl/draw_grid.sv
+    ../rtl/disp_hex_mux.sv
     ../rtl/main_fsm.sv
     ../rtl/player_ctrl.sv
 }

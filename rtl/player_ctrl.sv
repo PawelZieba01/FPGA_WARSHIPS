@@ -42,9 +42,9 @@
    logic [11:0]xpos_player;
    logic [11:0]ypos;
 
-   assign xpos_player = x_pos +  PLAYER_POS;
-   assign xpos_enemy = x_pos + ENEMY_POS;
-   assign ypos = y_pos + GRID_YPOS;
+   assign xpos_player = x_pos -  PLAYER_POS;
+   assign xpos_enemy = x_pos - ENEMY_POS;
+   assign ypos = y_pos - GRID_YPOS;
 
    always_ff @(posedge clk) begin
       if(rst) begin
@@ -89,7 +89,7 @@
       //enemy board//
       always_comb begin
          if((x_pos >= ENEMY_POS)&&(x_pos <= ENEMY_POS + GRID_SIZE)&&(y_pos >= GRID_YPOS)&&(y_pos <= GRID_YPOS+GRID_SIZE)&&(left))begin 
-            ec_nxt = {xpos_player[8:5],ypos[8:5]};
+            ec_nxt = {xpos_enemy[8:5],ypos[8:5]};
          end
          else begin 
             ec_nxt = 8'hff;

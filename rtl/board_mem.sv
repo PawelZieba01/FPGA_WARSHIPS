@@ -22,6 +22,7 @@
 	(
         input logic clk1,		//slow_clk
         input logic clk2,		//fast_clk
+		input logic rst,
         input logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] addr1,  //[7:4] x_addr, [3:0] y_addr	(addr for slow clk)
         input logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] addr2,  //[7:4] x_addr, [3:0] y_addr	(addr for fast clk)
         input logic [DATA_WIDTH-1 : 0] write_data1,
@@ -31,8 +32,9 @@
         output logic [DATA_WIDTH-1 : 0] read_data2		//read data for fast clk
 	);
 
-	(* ram_style = "block" *)
-	logic [DATA_WIDTH-1 : 0] ram [0:(1<<(Y_ADDR_WIDTH+X_ADDR_WIDTH))-1];
+	//(* ram_style = "block" *)
+	//logic [DATA_WIDTH-1 : 0] ram [0:(1<<(Y_ADDR_WIDTH+X_ADDR_WIDTH))-1];
+	logic [DATA_WIDTH-1 : 0] ram [0:(X_SIZE*Y_SIZE)-1];
 
 	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_addr1;
 	logic [Y_ADDR_WIDTH+X_ADDR_WIDTH-1 : 0] 	ram_addr2;
@@ -41,11 +43,17 @@
 	assign ram_addr2	= 	addr2[7:4] + (addr2[3:0])*12;
 
 	always_ff @(posedge clk1) begin : ram_write_nread_blk
-		if (w_nr) begin
-			ram[ram_addr1] <= write_data1;
+		if(rst) begin
+			ram <= '{default:2'b00};
+			read_data1 <= '0;
 		end
 		else begin
-			read_data1 <= ram[ram_addr1];
+			if (w_nr) begin
+				ram[ram_addr1] <= write_data1;
+			end
+			else begin
+				read_data1 <= ram[ram_addr1];
+			end
 		end
 	end
 
