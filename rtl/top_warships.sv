@@ -105,8 +105,8 @@ module top_warships (
     //7seg display signals
     logic [3:0]num_1 ;
     logic [3:0]num_2 ;
-    assign num_1 = ship_cords_out[7:4];
-    assign num_2 = ship_cords_out[3:0];
+    assign num_1 = my_ctr;  //numboer of left ships (my)
+    assign num_2 = en_ctr;  //numboer of left ships (enemy)
 
     
     // VGA interfaces
