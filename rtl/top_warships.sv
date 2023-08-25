@@ -92,7 +92,7 @@ module top_warships (
     assign led[15] = start_btn_en;
     assign led[14] = start_btn;
     assign led[13] = mouse_left;
-    //assign led[12] = ready2;
+    assign led[12] = ready2;
     
     // VGA interfaces
     vga_if tim_if();

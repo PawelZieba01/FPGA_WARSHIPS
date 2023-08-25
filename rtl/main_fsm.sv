@@ -105,30 +105,33 @@ always_comb begin : state_comb_blk
             if(my_grid_cords!=8'hff && my_ctr!=0) begin
                 state_nxt = PUT_SHIP;
             end
-            else if(start_btn && my_ctr==0 && ready2==0) begin
-                state_nxt = WAIT_FOR_SHOT;
-            end
-            else if(start_btn && my_ctr==0 && ready2==1) begin
-                state_nxt = WAIT_FOR_ENEMY;
-            end
             else begin
-                state_nxt = WAIT_FOR_BEGIN;
+                if(start_btn && my_ctr==0) begin
+                    state_nxt = ready2 ? WAIT_FOR_ENEMY : WAIT_FOR_SHOT;
+                end
+                else begin
+                    state_nxt = WAIT_FOR_BEGIN;
+                end
             end
         end
 
         PUT_SHIP:           state_nxt = WAIT_FOR_BEGIN;
         WAIT_FOR_ENEMY:     begin
-            if(en_ctr==0) begin
-                state_nxt = WIN;
-            end
-            else if(my_ctr==0) begin
+            if(my_ctr == 0) begin   //loose_state
                 state_nxt = LOSE;
             end
-            else if(hit2 && ready2) begin
-                state_nxt = MEM_READ;
-            end
             else begin
-                state_nxt = WAIT_FOR_ENEMY;
+                if(en_ctr == 0) begin   //win_state
+                    state_nxt = WIN;
+                end
+                else begin
+                    if(hit2 && ready2) begin    //mem_read_state
+                        state_nxt = MEM_READ;
+                    end
+                    else begin      //wait_for_enemy_state
+                        state_nxt = WAIT_FOR_ENEMY;
+                    end
+                end
             end
         end
         WAIT_FOR_SHOT:      state_nxt = (en_grid_cords!=8'hff) ? SHOT : WAIT_FOR_SHOT;
@@ -196,49 +199,56 @@ always_comb begin : out_comb_blk
 
     case(state)
         WAIT_FOR_BEGIN:     begin
-            if(my_grid_cords!=8'hff && my_ctr!=0) begin //put_ship_state
+            if(my_grid_cords!=8'hff && my_ctr!=0) begin     //put_ship_state
                 my_ctr_nxt = my_ctr-1;
                 my_mem_w_nr_nxt = '1;
                 my_mem_addr_nxt = my_grid_cords;
                 my_mem_data_out_nxt = GRID_STATUS_MYSHIP; 
             end
-            else if(start_btn && my_ctr==0 && ready2==0) begin //wait_for_shot_state
-                ready1_nxt = '1;
-                hit1_nxt = '0;
-                my_ctr_nxt = SHIPS_NUMBER;
-                en_ctr_nxt = SHIPS_NUMBER;
-                start_btn_en_nxt = 1'b0;
-
-            end
-            else if(start_btn && my_ctr==0 && ready2==1) begin //wait_for_enemy_state
-                ready1_nxt = '1;
-                hit1_nxt = '0;
-                my_ctr_nxt = SHIPS_NUMBER;
-                en_ctr_nxt = SHIPS_NUMBER;
-                start_btn_en_nxt = 1'b0;
-            end
-            else begin //wait_for_begin_state
-                ready1_nxt = '0;
-                my_ctr_nxt = my_ctr;
+            else begin
+                if(start_btn && my_ctr==0) begin
+                     if(ready2) begin   //wait_for_enemy_state
+                        ready1_nxt = '1;
+                        hit1_nxt = '0;
+                        my_ctr_nxt = SHIPS_NUMBER;
+                        en_ctr_nxt = SHIPS_NUMBER;
+                        start_btn_en_nxt = 1'b0;
+                     end
+                     else begin         //wait_for_shot_state
+                        ready1_nxt = '1;
+                        hit1_nxt = '0;
+                        my_ctr_nxt = SHIPS_NUMBER;
+                        en_ctr_nxt = SHIPS_NUMBER;
+                        start_btn_en_nxt = 1'b0;
+                    end
+                end
+                else begin      //wait_for_begin_state
+                    ready1_nxt = '0;
+                    my_ctr_nxt = my_ctr;
+                end
             end
         end
 
         PUT_SHIP:           {ready1_nxt, my_mem_w_nr_nxt, my_ctr_nxt} = {1'b0, 1'b0, my_ctr};
         WAIT_FOR_ENEMY:     begin
-            if(en_ctr==0) begin //win_state
-                //tutaj zkonczenie gry - win
-            end
-            else if(my_ctr==0) begin //loose_state
+            if(my_ctr == 0) begin   //loose_state
                 //tutaj zkonczenie gry - loose
             end
-            else if(hit2 && ready2) begin //mem_read_state
-                my_mem_addr_nxt = ship_cords_in;
-                my_mem_w_nr_nxt = '0;
-                ready1_nxt = '0;
-            end
-            else begin // wait_for_enemy_state
-                ready1_nxt = '1;
-                hit1_nxt = '0;
+            else begin
+                if(en_ctr == 0) begin   //win_state
+                    //tutaj zkonczenie gry - win
+                end
+                else begin
+                    if(hit2 && ready2) begin    //mem_read_state
+                        my_mem_addr_nxt = ship_cords_in;
+                        my_mem_w_nr_nxt = '0;
+                        ready1_nxt = '0;
+                    end
+                    else begin      //wait_for_enemy_state
+                        ready1_nxt = '1;
+                        hit1_nxt = '0;
+                    end
+                end
             end
         end
         WAIT_FOR_SHOT:      {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
@@ -268,17 +278,3 @@ always_comb begin : out_comb_blk
 end
 
 endmodule
-
-/*
- * my_ctr_nxt = my_ctr;
-            en_ctr_nxt = en_ctr;
-            my_mem_data_out_nxt = my_mem_data_out;
-            en_mem_data_out_nxt = en_mem_data_out;
-            my_mem_w_nr_nxt = my_mem_w_nr;
-            en_mem_w_nr_nxt = en_mem_w_nr;
-            my_mem_addr_nxt = my_mem_addr;
-            en_mem_addr_nxt = en_mem_addr;
-            ship_cords_out_nxt = ship_cords_out;
-            ready1_nxt = ready1;
-            hit1_nxt = hit1;
-*/
