@@ -27,7 +27,7 @@ module top_warships (
     input logic [7:0] ship_cords_in,
     output logic [7:0] ship_cords_out,
     
-    output logic [6:0] seg,
+    output logic [6:0] sseg,
     output logic [3:0] an,
 
     output logic vs,
@@ -46,46 +46,53 @@ module top_warships (
     logic [11:0] mouse_x_pos, mouse_y_pos;
     logic mouse_left, mouse_left_db;
 
+  
     //start button signals
     logic [11:0] rgb_pixel_start_btn;
     logic [13:0] rgb_pixel_addr_start_btn;
     logic  start_btn;
     logic  start_btn_en;
 
+  
     //my board memory and draw ships signals
     logic [7:0] my_board_read2_addr, my_board_read1_write1_addr;
     logic [1:0] my_board_read2_data, my_board_read1_data, my_board_write1_data;
     logic my_board_write_nread;
 
+  
     //enemy board memory and draw ships signals
     logic [7:0] enemy_board_read2_addr, enemy_board_read1_write1_addr;
     logic [1:0] enemy_board_read2_data, enemy_board_read1_data, enemy_board_write1_data;
     logic enemy_board_write_nread;
 
+  
     //text my ships signals
     logic [7:0] ms_char_pixels;
     logic [3:0] ms_char_line;
     logic [7:0] ms_char_xy;
     logic [6:0] ms_char_code;
 
+  
     //text ENEMY ships signals
     logic [7:0] e_char_pixels;
     logic [3:0] e_char_line;
     logic [7:0] e_char_xy;
     logic [6:0] e_char_code;
 
+  
     //ship counters
     logic [3:0] en_ctr;
     logic [3:0] my_ctr;
 
-
-
+  
     //coordinates signals from player_ctrl
     logic [7:0] my_grid_cords, en_grid_cords;
 
+  
     //fsm state for debug
     logic [3:0] state_fsm;
 
+  
     //led debug
     assign led[3:0] = state_fsm;
     assign led[11:4] = 8'(my_ctr);
@@ -93,6 +100,14 @@ module top_warships (
     assign led[14] = start_btn;
     assign led[13] = mouse_left;
     assign led[12] = ready2;
+  
+  
+    //7seg display signals
+    logic [3:0]num_1 ;
+    logic [3:0]num_2 ;
+    assign num_1 = 12;
+    assign num_2 = 4;
+
     
     // VGA interfaces
     vga_if tim_if();
@@ -384,4 +399,13 @@ module top_warships (
     );
 
 
+//---------------------------------------------7_SEG DISPLAY---------------------------------------//
+    disp_hex_mux u_disp_hex_mux(
+    .clk(vga_clk),
+    .rst,
+    .num_1,
+    .num_2,
+    .sseg,
+    .an
+   );
 endmodule

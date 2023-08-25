@@ -106,7 +106,6 @@ top_warships u_top_warships (
     .b(vgaBlue),
     .hs(Hsync),
     .vs(Vsync),
-
     .led,
 
     .ready2(JA_in[0]),
@@ -117,7 +116,8 @@ top_warships u_top_warships (
     .ship_cords_in({JB[4], JB[5], JB[6], JB[7], JB[0], JB[1], JB[2], JB[3]}),
     .ship_cords_out(JC),
 
-    .seg,
+    .sseg(seg),
+
     .an
 );
 
