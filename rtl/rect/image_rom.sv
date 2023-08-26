@@ -4,7 +4,8 @@
  * Author: Robert Szczygiel
  * Modified: Piotr Kaczmarczyk
  * 
- * Modified: Pawel Zieba   
+ * Modified: Pawel Zieba
+ * Modified: Natalia KApuscinska 
  *
  * Description:
  * The input 'address' is a 12-bit number, composed of the concatenated

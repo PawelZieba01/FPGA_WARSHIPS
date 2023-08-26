@@ -5,7 +5,7 @@
 // simulation time units are (1 ns here) and what 
 // the simulator time step should be (1 ps here).
 
-//Modified by:
+//Author:
 //2023 Paweł Zięba  
 
 `timescale 1 ns / 1 ps

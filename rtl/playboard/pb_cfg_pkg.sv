@@ -3,7 +3,6 @@
  * MTM UEC2
  * Author: Pawel Zieba
  *
- *
  * Description:
  * Package all parameters for playboard.
  */

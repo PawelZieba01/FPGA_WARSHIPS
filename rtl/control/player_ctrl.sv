@@ -5,7 +5,7 @@
  * 2023  
  *
  * Description:
- * Mouse controller, this vi checks if user choose any of the interfce options
+ * Mouse controller, this module checks if user choose any of the interfce options
  */
 
  `timescale 1 ns / 1 ps
@@ -19,8 +19,8 @@
     input logic left,
 
     output logic start_btn,
-    output logic [7:0] player_cor, //player board coordinates
-    output logic [7:0] enemy_cor //enemy board coordinates
+    output logic [7:0] player_cor,  //player board coordinates
+    output logic [7:0] enemy_cor    //enemy board coordinates
     
 
  );

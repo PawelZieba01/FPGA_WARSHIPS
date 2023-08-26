@@ -1,9 +1,9 @@
 //////////////////////////////////////////////////////////////////////////////
 /*
  Module name:   main_fsm
- Author:        Robert Szczygiel
+ Author:        Pawel Zieba
  Version:       1.0
- Last modified: 2023-05-18
+ Last modified: 2023-08-26
  Coding style: safe with FPGA sync reset
  Description:  Main FSM module for FPGA_WARSHIPS project
  */
@@ -48,10 +48,13 @@ module main_fsm(
 );
 
 import project_cfg_pkg::*;
+
+
 //------------------------------------------------------------------------------
 // local parameters
 //------------------------------------------------------------------------------
 localparam STATE_BITS = 4; // number of bits used for state register
+
 
 //------------------------------------------------------------------------------
 // local variables
@@ -86,6 +89,7 @@ enum logic [STATE_BITS-1 :0] {
 
 assign state_out = state;
 
+
 //------------------------------------------------------------------------------
 // state sequential with synchronous reset
 //------------------------------------------------------------------------------
@@ -97,6 +101,8 @@ always_ff @(posedge clk) begin : state_seq_blk
         state <= state_nxt;
     end
 end
+
+
 //------------------------------------------------------------------------------
 // next state logic
 //------------------------------------------------------------------------------
@@ -160,6 +166,8 @@ always_comb begin : state_comb_blk
         default: state_nxt = state;
     endcase
 end
+
+
 //------------------------------------------------------------------------------
 // output register
 //------------------------------------------------------------------------------
@@ -201,6 +209,8 @@ always_ff @(posedge clk) begin : out_reg_blk
         en_turn             <= en_turn_nxt;
     end
 end
+
+
 //------------------------------------------------------------------------------
 // output logic
 //------------------------------------------------------------------------------

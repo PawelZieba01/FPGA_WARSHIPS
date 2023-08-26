@@ -3,9 +3,8 @@
  * MTM UEC2
  * Author: Natalia Kapuscinska
  *
- * 
  * Description:
- * Draws grid witch is a playboard for the game.
+ * Draws grid which is a playboard for the game.
  */
 
 

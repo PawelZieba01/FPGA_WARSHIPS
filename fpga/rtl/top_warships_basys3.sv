@@ -1,16 +1,8 @@
 /**
- * San Jose State University
- * EE178 Lab #4
- * Author: prof. Eric Crabilla
- *
- * Modified by:
  * 2023  AGH University of Science and Technology
  * MTM UEC2
- * Piotr Kaczmarczyk
- * 
- * 2023
- * Paweł Zięba  
- *
+ * Pawel Zieba
+ *   
  * Description:
  * Top level synthesizable module including the project top and all the FPGA-referred modules.
  * FPGA_WARSHIPS_2023
@@ -59,13 +51,11 @@ logic clk_10MHz;
 // For details on synthesis attributes used above, see AMD Xilinx UG 901:
 // https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis/Synthesis-Attributes
 
-
 /**
  * Signals assignments
  */
 
 assign JA1 = clk_65MHz_mirror;
-
 
 /**
  * FPGA submodules placement

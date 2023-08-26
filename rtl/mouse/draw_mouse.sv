@@ -4,12 +4,10 @@
  * Author: Paweł Zięba  
  * 
  * Description:
- * Draw mouse.
+ * Draw mouse module.
  */
 
  `timescale 1 ns / 1 ps
-
-
 
 module draw_mouse (
     input logic clk,

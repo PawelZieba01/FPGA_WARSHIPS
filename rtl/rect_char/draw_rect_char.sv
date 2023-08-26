@@ -4,7 +4,7 @@
  * Author: Paweł Zięba  
  * 
  * Description:
- * Draw text.
+ * Text drawing module.
  */
 
  `timescale 1 ns / 1 ps

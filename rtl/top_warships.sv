@@ -1,6 +1,6 @@
 /**
  * 2023  AGH University of Science and Technology
- * Paweł Zięba 
+ * Paweł Zięba & Natalia Kapuscinska
  *
  * Description:
  * The project top module.
