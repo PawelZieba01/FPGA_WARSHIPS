@@ -63,7 +63,7 @@ module top_warships (
   
     //enemy board memory and draw ships signals
     logic [7:0] enemy_board_read2_addr, enemy_board_read1_write1_addr;
-    logic [1:0] enemy_board_read2_data, enemy_board_read1_data, enemy_board_write1_data;
+    logic [1:0] enemy_board_read2_data, enemy_board_write1_data;
     logic enemy_board_write_nread;
 
   
@@ -144,7 +144,7 @@ module top_warships (
 
         .en_grid_cords,
         .en_mem_addr(enemy_board_read1_write1_addr),
-        .en_mem_data_in(enemy_board_read1_data),
+        .en_mem_data_in(),
         .en_mem_data_out(enemy_board_write1_data),
         .en_mem_w_nr(enemy_board_write_nread),
         
