@@ -24,7 +24,6 @@ module main_fsm(
     output logic my_mem_w_nr,
 
     output  logic  [7:0] en_mem_addr,
-    input  logic  [1:0] en_mem_data_in,
     output  logic  [1:0] en_mem_data_out,
     output logic en_mem_w_nr,
 
