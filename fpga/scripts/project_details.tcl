@@ -2,6 +2,9 @@
 # MTM UEC2
 # Author: Piotr Kaczmarczyk
 #
+# Modified by: Pawel Zieba
+#              Natalia Kapuscinska
+#
 # Description:
 # Project detiles required for generate_bitstream.tcl
 # Make sure that project_name, top_module and target are correct.
@@ -32,42 +35,50 @@ set xdc_files {
 
 # Specify SystemVerilog design files location   -- EDIT
 set sv_files {
-    ../rtl/vga/vga_pkg.sv
+    ../rtl/playboard/pb_cfg_pkg.sv
+    ../rtl/control/project_cfg_pkg.sv
+    ../rtl/background/bg_cfg_pkg.sv
+    ../rtl/vga/vga_cfg_pkg.sv
+    ../rtl/rect_char/text_cfg_pkg.sv
+
     ../rtl/vga/vga_if.sv
 
     ../rtl/vga/vga_timing.sv
     ../rtl/vga/h_counter.sv
     ../rtl/vga/v_counter.sv
 
-    ../rtl/draw_bg.sv
-    ../rtl/common/simple_clk_div.sv
+    ../rtl/background/draw_bg.sv
+
     ../rtl/rect/draw_rect.sv
     ../rtl/rect/draw_rect_ctl.sv
-    ../rtl/mouse/draw_mouse.sv
     ../rtl/rect/image_rom.sv
 
     ../rtl/rect_char/draw_rect_char.sv
     ../rtl/rect_char/char_rom_16x16.sv
-    
 
+    ../rtl/mouse/draw_mouse.sv
+    
+    ../rtl/playboard/board_mem.sv
+    ../rtl/playboard/draw_ships.sv
+    ../rtl/playboard/draw_grid.sv
+
+    ../rtl/control/disp_hex_mux.sv
+    ../rtl/control/main_fsm.sv
+    ../rtl/control/player_ctrl.sv
+    
     ../rtl/top_warships.sv
-    
     rtl/top_warships_basys3.sv
-
-    ../rtl/board_mem.sv
-    ../rtl/draw_ships.sv
-    ../rtl/draw_grid.sv
-    ../rtl/disp_hex_mux.sv
-    ../rtl/main_fsm.sv
-    ../rtl/player_ctrl.sv
 }
 
 # Specify Verilog design files location         -- EDIT
 set verilog_files {
-    ../rtl/common/debounce.v
+    
     rtl/clk_wiz_0_clk_wiz.v
     rtl/clk_wiz_0.v
+
     ../rtl/common/delay.v
+    ../rtl/common/debounce.v
+
     ../rtl/rect_char/font_rom.v
 }
 

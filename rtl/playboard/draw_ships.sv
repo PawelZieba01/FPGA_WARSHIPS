@@ -22,16 +22,7 @@
     vga_if.out out
  );
 
-    localparam GRID_ROWS = 12;
-    localparam GRID_COLUMNS = 12;
-    localparam GRID_ELEMENT_HEIGHT = 32;
-    localparam GRID_ELEMENT_WIDTH = 32;
-    localparam GRID_BORDER_WIDTH = 2;
-
-    localparam GRID_STATUS_EMPTY = 2'b00;
-    localparam GRID_STATUS_MYSHIP = 2'b01;
-    localparam GRID_STATUS_MISS = 2'b10;
-    localparam GRID_STATUS_HIT = 2'b11;
+    import pb_cfg_pkg::*;
 
     logic [7:0] grid_addr_nxt;
     logic [11:0] rgb_nxt;

@@ -37,6 +37,7 @@ module top_warships (
     output logic [3:0] b
 );
 
+    import project_cfg_pkg::*;
 
     /**
      * Local variables and signals
@@ -198,15 +199,15 @@ module top_warships (
 
     //--------------------------------------START BUTTON-----------------------------------------
     draw_rect 
-    #(  .RECT_HEIGHT(64),
-        .RECT_WIDTH(128)
+    #(  .RECT_HEIGHT(SBtn_HEIGHT),
+        .RECT_WIDTH(SBtn_WIDITH)
     )
     u_draw_start_btn(
         .clk(vga_clk),
         .rst,
         .enable(start_btn_en),
-        .x_pos(12'd448),
-        .y_pos(12'd40),
+        .x_pos(12'(SBtn_XPOS)),
+        .y_pos(12'(SBtn_YPOS)),
         .in(bg_if),
         .out(start_btn_if),
 
@@ -223,8 +224,8 @@ module top_warships (
 
     //-----------------------------------------MY_SHIPS----------------------------------------------
     draw_grid #(
-        .X_POS(100),
-        .Y_POS(200)
+        .X_POS(PLAYER_POS),
+        .Y_POS(GRID_YPOS)
     )
     u_draw_my_grid(
         .clk(vga_clk),
@@ -233,7 +234,7 @@ module top_warships (
         .out(my_grid_if)
     );
 
-    draw_ships #(.X_POS(100), .Y_POS(200))
+    draw_ships #(.X_POS(PLAYER_POS), .Y_POS(GRID_YPOS))
         u_draw_my_ships(
             .clk(vga_clk),
             .rst,
@@ -265,8 +266,8 @@ module top_warships (
 
     //---------------------------------------ENEMY_SHIPS--------------------------------------------
     draw_grid #(
-        .X_POS(538),
-        .Y_POS(200)
+        .X_POS(ENEMY_POS),
+        .Y_POS(GRID_YPOS)
     )
     u_draw_enemy_grid(
         .clk(vga_clk),
@@ -275,7 +276,7 @@ module top_warships (
         .out(enemy_grid_if)
     );
 
-    draw_ships #(.X_POS(538), .Y_POS(200))
+    draw_ships #(.X_POS(ENEMY_POS), .Y_POS(GRID_YPOS))
         u_draw_enemy_ships(
             .clk(vga_clk),
             .rst,

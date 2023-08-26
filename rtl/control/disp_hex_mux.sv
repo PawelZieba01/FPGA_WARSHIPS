@@ -1,8 +1,10 @@
 ////////////////////////////////////////////////////////
-// author Natalia Kapuścńska                          //
-// module name disp_hex_mux                           //
-// description:                                       //
-// this module converts two numbers to                //
+// Author: Natalia Kapuścńska                         //
+// Module name: disp_hex_mux                          //
+//                                                    //
+// Description:                                       //
+// This module converts two decimal numbers to format //
+// for 7seg display                                   //
 ////////////////////////////////////////////////////////
 module disp_hex_mux(
       input wire clk, rst,
