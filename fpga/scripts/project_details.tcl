@@ -50,7 +50,6 @@ set sv_files {
     ../rtl/background/draw_bg.sv
 
     ../rtl/rect/draw_rect.sv
-    ../rtl/rect/draw_rect_ctl.sv
     ../rtl/rect/image_rom.sv
 
     ../rtl/rect_char/draw_rect_char.sv
