@@ -165,7 +165,12 @@ module top_warships (
         .start_btn,
         .start_btn_en,
 
-        .state_out(state_fsm)
+        .state_out(state_fsm),
+
+        .en_turn(),
+        .my_turn(),
+        .lose(),
+        .win()
     );
 
     //----------------------------------------PLAYER CONTROL--------------------------------------------

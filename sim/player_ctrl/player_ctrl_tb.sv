@@ -7,17 +7,13 @@
  * 2023  AGH University of Science and Technology
  * MTM UEC2
  * Piotr Kaczmarczyk
+ * 
+ * 2023  AGH University of Science and Technology
+ * MTM UEC2
+ * NAtalia Kapuscinska
  *
  * Description:
- * Testbench for top_vga.
- * Thanks to the tiff_writer module, an expected image
- * produced by the project is exported to a tif file.
- * Since the vs signal is connected to the go input of
- * the tiff_writer, the first (top-left) pixel of the tif
- * will not correspond to the vga project (0,0) pixel.
- * The active image (not blanked space) in the tif file
- * will be shifted down by the number of lines equal to
- * the difference between VER_SYNC_START and VER_TOTAL_TIME.
+ * Testbench for player_ctrl module.
  */
 
 `timescale 1 ns / 1 ps

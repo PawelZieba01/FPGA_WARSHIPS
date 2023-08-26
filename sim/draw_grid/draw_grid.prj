@@ -2,6 +2,8 @@
 # MTM UEC2
 # Author: Piotr Kaczmarczyk
 #
+# Modified by: Natalia KApuscinska
+#
 # Description:
 # List of files defining the modules used during the test.
 # Specify the file paths relative to THIS file.
@@ -9,13 +11,16 @@
 # https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
 
 
-sv work ../../rtl/vga/vga_pkg.sv \
+sv work ../../rtl/vga/vga_cfg_pkg.sv \
+        ../../rtl/background/bg_cfg_pkg.sv \
+        ../../rtl/control/project_cfg_pkg.sv \
+        ../../rtl/playboard/pb_cfg_pkg.sv \
         ../../rtl/vga/vga_timing.sv \
-        ../../rtl/draw_bg.sv \
+        ../../rtl/background/draw_bg.sv \
         ../../rtl/vga/h_counter.sv \
         ../../rtl/vga/v_counter.sv \
         ../../rtl/vga/vga_if.sv \
-        ../../rtl/draw_grid.sv \
+        ../../rtl/playboard/draw_grid.sv \
         ../common/tiff_writer.sv \
         draw_grid_tb.sv \
         draw_grid_top_test.sv

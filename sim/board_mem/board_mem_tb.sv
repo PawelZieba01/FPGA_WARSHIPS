@@ -34,7 +34,7 @@ localparam MEM_Y_ADDR_WIDTH = 4;
  * Local variables and signals
  */
 
-logic clk1, clk2;
+logic clk1, clk2, rst;
 logic [MEM_Y_ADDR_WIDTH+MEM_X_ADDR_WIDTH-1 : 0] mem_addr1, mem_addr2;   
 logic [MEM_DATA_WIDTH-1:0] write_data1;
 logic [MEM_DATA_WIDTH-1:0] read_data2;
@@ -68,11 +68,13 @@ board_mem #(
     .Y_ADDR_WIDTH(MEM_Y_ADDR_WIDTH),
     .DATA_WIDTH(MEM_DATA_WIDTH)) 
 dut (
+    .rst,
     .clk1(clk1),
     .clk2(clk2),
     .addr1(mem_addr1),
     .addr2(mem_addr2),
     .write_data1,
+    .read_data1(),
     .read_data2,
     .w_nr
 );
@@ -92,6 +94,8 @@ dut (
 
 
 initial begin
+    rst = 1;
+    #100 rst = 0;
     w_nr = 1'b0;
     write_data1 = '0;
     mem_addr2 = -1;

@@ -14,7 +14,7 @@
 // - 1 -> char 16x32
 module draw_rect_char 
 #(
-    parameter X_POS, Y_POS, TEXT_SIZE=0
+    parameter X_POS=0, Y_POS=0, TEXT_SIZE=0
 )
 (
     input logic clk,
