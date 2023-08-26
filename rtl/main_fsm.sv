@@ -134,7 +134,20 @@ always_comb begin : state_comb_blk
                 end
             end
         end
-        WAIT_FOR_SHOT:      state_nxt = (en_grid_cords!=8'hff) ? SHOT : WAIT_FOR_SHOT;
+        WAIT_FOR_SHOT:      begin
+            if(en_ctr == 0) begin       //win_state
+                state_nxt = WIN;
+            end
+            else begin
+                if(my_ctr == 0) begin   //lose state
+                    state_nxt = LOSE;
+                end
+                else begin              //shot or wait_for_shot state
+                    state_nxt = (en_grid_cords!=8'hff) ? SHOT : WAIT_FOR_SHOT;
+                end
+            end
+            
+        end
         MEM_READ:           state_nxt = MEM_CHECK;
         MEM_CHECK:          state_nxt = COMPARE_AND_SAVE;
         COMPARE_AND_SAVE:   state_nxt = ready2 ? WAIT_FOR_SHOT : COMPARE_AND_SAVE;
@@ -251,7 +264,19 @@ always_comb begin : out_comb_blk
                 end
             end
         end
-        WAIT_FOR_SHOT:      {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
+        WAIT_FOR_SHOT:      begin
+            if(en_ctr == 0) begin       //win state
+
+            end
+            else begin                  
+                if(my_ctr == 0) begin   //lose state
+
+                end
+                else begin              //shot or wait_for_shot state
+                    {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
+                end
+            end
+        end
         MEM_READ:           ready1_nxt = 1'b0;
         MEM_CHECK:          begin
                             {hit1_nxt, my_ctr_nxt, my_mem_data_out_nxt} = ((my_mem_data_in == GRID_STATUS_MYSHIP) || (my_mem_data_in == GRID_STATUS_HIT)) ? {1'b1, 4'(my_ctr-1), GRID_STATUS_HIT} : {1'b0, my_ctr, GRID_STATUS_MISS};
