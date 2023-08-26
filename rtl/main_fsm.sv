@@ -39,7 +39,10 @@ module main_fsm(
     output logic [3:0] my_ctr,
     output logic [3:0] en_ctr,
 
-    output logic [3:0] state_out
+    output logic [3:0] state_out,
+
+    output logic win,
+    output logic lose
 );
 
 //------------------------------------------------------------------------------
@@ -67,6 +70,7 @@ logic  [7:0] my_mem_addr_nxt, en_mem_addr_nxt;
 logic  [1:0] my_mem_data_out_nxt, en_mem_data_out_nxt;
 logic  [7:0] ship_cords_out_nxt;
 logic start_btn_en_nxt;
+logic win_nxt, lose_nxt;
 
 enum logic [STATE_BITS-1 :0] {
     WAIT_FOR_BEGIN      = 4'b0000, // idle state
@@ -176,6 +180,8 @@ always_ff @(posedge clk) begin : out_reg_blk
         ready1          <= '0;
         hit1            <= '0;
         start_btn_en    <= '1;
+        win             <= '0;
+        lose            <= '0;
     end
     else begin : out_reg_run_blk
         my_ctr              <= my_ctr_nxt;
@@ -190,6 +196,8 @@ always_ff @(posedge clk) begin : out_reg_blk
         ready1              <= ready1_nxt;
         hit1                <= hit1_nxt;
         start_btn_en        <= start_btn_en_nxt;
+        win                 <= win_nxt;
+        lose                <= lose_nxt;
     end
 end
 //------------------------------------------------------------------------------
@@ -208,6 +216,8 @@ always_comb begin : out_comb_blk
     ready1_nxt = ready1;
     hit1_nxt = hit1;
     start_btn_en_nxt = start_btn_en;
+    win_nxt = win;
+    lose_nxt = lose;
 
 
     case(state)
@@ -245,11 +255,11 @@ always_comb begin : out_comb_blk
         PUT_SHIP:           {ready1_nxt, my_mem_w_nr_nxt, my_ctr_nxt} = {1'b0, 1'b0, my_ctr};
         WAIT_FOR_ENEMY:     begin
             if(my_ctr == 0) begin   //loose_state
-                //tutaj zkonczenie gry - loose
+               {win, lose} = {1'b0, 1'b1};
             end
             else begin
                 if(en_ctr == 0) begin   //win_state
-                    //tutaj zkonczenie gry - win
+                    {win, lose} = {1'b1, 1'b0};
                 end
                 else begin
                     if(hit2 && ready2) begin    //mem_read_state
@@ -266,11 +276,11 @@ always_comb begin : out_comb_blk
         end
         WAIT_FOR_SHOT:      begin
             if(en_ctr == 0) begin       //win state
-
+                {win, lose} = {1'b1, 1'b0};
             end
             else begin                  
                 if(my_ctr == 0) begin   //lose state
-
+                    {win, lose} = {1'b0, 1'b1};
                 end
                 else begin              //shot or wait_for_shot state
                     {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
