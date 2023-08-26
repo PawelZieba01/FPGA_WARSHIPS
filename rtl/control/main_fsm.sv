@@ -144,7 +144,7 @@ always_comb begin : state_comb_blk
                     state_nxt = LOSE;
                 end
                 else begin              //shot or wait_for_shot state
-                    state_nxt = (en_grid_cords!=8'hff) ? SHOT : WAIT_FOR_SHOT;
+                    state_nxt = (en_grid_cords!=8'hff && ready2) ? SHOT : WAIT_FOR_SHOT;
                 end
             end
             
