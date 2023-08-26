@@ -39,7 +39,12 @@ module main_fsm(
     output logic [3:0] my_ctr,
     output logic [3:0] en_ctr,
 
-    output logic [3:0] state_out
+    output logic [3:0] state_out,
+
+    output logic win,
+    output logic lose,
+    output logic my_turn,
+    output logic en_turn
 );
 
 //------------------------------------------------------------------------------
@@ -67,6 +72,8 @@ logic  [7:0] my_mem_addr_nxt, en_mem_addr_nxt;
 logic  [1:0] my_mem_data_out_nxt, en_mem_data_out_nxt;
 logic  [7:0] ship_cords_out_nxt;
 logic start_btn_en_nxt;
+logic win_nxt, lose_nxt;
+logic my_turn_nxt, en_turn_nxt;
 
 enum logic [STATE_BITS-1 :0] {
     WAIT_FOR_BEGIN      = 4'b0000, // idle state
@@ -134,7 +141,20 @@ always_comb begin : state_comb_blk
                 end
             end
         end
-        WAIT_FOR_SHOT:      state_nxt = (en_grid_cords!=8'hff) ? SHOT : WAIT_FOR_SHOT;
+        WAIT_FOR_SHOT:      begin
+            if(en_ctr == 0) begin       //win_state
+                state_nxt = WIN;
+            end
+            else begin
+                if(my_ctr == 0) begin   //lose state
+                    state_nxt = LOSE;
+                end
+                else begin              //shot or wait_for_shot state
+                    state_nxt = (en_grid_cords!=8'hff) ? SHOT : WAIT_FOR_SHOT;
+                end
+            end
+            
+        end
         MEM_READ:           state_nxt = MEM_CHECK;
         MEM_CHECK:          state_nxt = COMPARE_AND_SAVE;
         COMPARE_AND_SAVE:   state_nxt = ready2 ? WAIT_FOR_SHOT : COMPARE_AND_SAVE;
@@ -163,6 +183,10 @@ always_ff @(posedge clk) begin : out_reg_blk
         ready1          <= '0;
         hit1            <= '0;
         start_btn_en    <= '1;
+        win             <= '0;
+        lose            <= '0;
+        my_turn         <= '0;
+        en_turn         <= '0;
     end
     else begin : out_reg_run_blk
         my_ctr              <= my_ctr_nxt;
@@ -177,6 +201,10 @@ always_ff @(posedge clk) begin : out_reg_blk
         ready1              <= ready1_nxt;
         hit1                <= hit1_nxt;
         start_btn_en        <= start_btn_en_nxt;
+        win                 <= win_nxt;
+        lose                <= lose_nxt;
+        my_turn             <= my_turn_nxt;
+        en_turn             <= en_turn_nxt;
     end
 end
 //------------------------------------------------------------------------------
@@ -195,6 +223,10 @@ always_comb begin : out_comb_blk
     ready1_nxt = ready1;
     hit1_nxt = hit1;
     start_btn_en_nxt = start_btn_en;
+    win_nxt = win;
+    lose_nxt = lose;
+    my_turn_nxt = my_turn;
+    en_turn_nxt = en_turn;
 
 
     case(state)
@@ -213,6 +245,7 @@ always_comb begin : out_comb_blk
                         my_ctr_nxt = SHIPS_NUMBER;
                         en_ctr_nxt = SHIPS_NUMBER;
                         start_btn_en_nxt = 1'b0;
+                        {my_turn_nxt, en_turn_nxt} = {1'b0, 1'b1};
                      end
                      else begin         //wait_for_shot_state
                         ready1_nxt = '1;
@@ -220,6 +253,7 @@ always_comb begin : out_comb_blk
                         my_ctr_nxt = SHIPS_NUMBER;
                         en_ctr_nxt = SHIPS_NUMBER;
                         start_btn_en_nxt = 1'b0;
+                        {my_turn_nxt, en_turn_nxt} = {1'b1, 1'b0};
                     end
                 end
                 else begin      //wait_for_begin_state
@@ -232,11 +266,11 @@ always_comb begin : out_comb_blk
         PUT_SHIP:           {ready1_nxt, my_mem_w_nr_nxt, my_ctr_nxt} = {1'b0, 1'b0, my_ctr};
         WAIT_FOR_ENEMY:     begin
             if(my_ctr == 0) begin   //loose_state
-                //tutaj zkonczenie gry - loose
+               {win_nxt, lose_nxt} = {1'b0, 1'b1};
             end
             else begin
                 if(en_ctr == 0) begin   //win_state
-                    //tutaj zkonczenie gry - win
+                    {win_nxt, lose_nxt} = {1'b1, 1'b0};
                 end
                 else begin
                     if(hit2 && ready2) begin    //mem_read_state
@@ -247,11 +281,25 @@ always_comb begin : out_comb_blk
                     else begin      //wait_for_enemy_state
                         ready1_nxt = '1;
                         hit1_nxt = '0;
+                        {my_turn_nxt, en_turn_nxt} = {1'b0, 1'b1};
                     end
                 end
             end
         end
-        WAIT_FOR_SHOT:      {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
+        WAIT_FOR_SHOT:      begin
+            if(en_ctr == 0) begin       //win state
+                {win_nxt, lose_nxt} = {1'b1, 1'b0};
+            end
+            else begin                  
+                if(my_ctr == 0) begin   //lose state
+                    {win_nxt, lose_nxt} = {1'b0, 1'b1};
+                end
+                else begin              //shot or wait_for_shot state
+                    {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
+                    {my_turn_nxt, en_turn_nxt} = {1'b1, 1'b0};
+                end
+            end
+        end
         MEM_READ:           ready1_nxt = 1'b0;
         MEM_CHECK:          begin
                             {hit1_nxt, my_ctr_nxt, my_mem_data_out_nxt} = ((my_mem_data_in == GRID_STATUS_MYSHIP) || (my_mem_data_in == GRID_STATUS_HIT)) ? {1'b1, 4'(my_ctr-1), GRID_STATUS_HIT} : {1'b0, my_ctr, GRID_STATUS_MISS};
@@ -262,6 +310,7 @@ always_comb begin : out_comb_blk
         COMPARE_AND_SAVE:   begin
                             {ready1_nxt, hit1_nxt, my_mem_w_nr_nxt} = ready2 ? {1'b1, 1'b0, 1'b0} : {1'b1, hit1, 1'b0};
                             my_ctr_nxt = my_ctr;
+                            {my_turn_nxt, en_turn_nxt} = {1'b1, 1'b0};
                             end
         SHOT:               {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = {1'b1, 1'b1, ship_cords_out};
         WAIT_FOR_ANSWER:    begin
@@ -270,7 +319,10 @@ always_comb begin : out_comb_blk
                                     {en_mem_data_out_nxt, en_ctr_nxt} = hit2 ? {GRID_STATUS_HIT, 4'(en_ctr-1)} : {GRID_STATUS_MISS, en_ctr};
                                 end
                             end
-        SAVE_RESULT:        {ready1_nxt, hit1_nxt, en_mem_w_nr_nxt, en_ctr_nxt} = ready2 ? {1'b1, 1'b0, 1'b0, en_ctr} : {ready1, hit1, en_mem_w_nr, en_ctr};
+        SAVE_RESULT:        begin
+            {ready1_nxt, hit1_nxt, en_mem_w_nr_nxt, en_ctr_nxt} = ready2 ? {1'b1, 1'b0, 1'b0, en_ctr} : {ready1, hit1, en_mem_w_nr, en_ctr};
+            {my_turn_nxt, en_turn_nxt} = {1'b0, 1'b1};
+        end
         WIN:                {ready1_nxt, hit1_nxt} = {ready1, hit1};
         LOSE:               {ready1_nxt, hit1_nxt} = {ready1, hit1};
         default:            {ready1_nxt, hit1_nxt} = {ready1, hit1};
