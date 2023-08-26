@@ -144,7 +144,6 @@ module top_warships (
 
         .en_grid_cords,
         .en_mem_addr(enemy_board_read1_write1_addr),
-        .en_mem_data_in(),
         .en_mem_data_out(enemy_board_write1_data),
         .en_mem_w_nr(enemy_board_write_nread),
         

@@ -32,7 +32,6 @@ logic clk;
 logic rst;
 logic [7:0] en_grid_cords;
 logic [7:0] en_mem_addr;
-logic [1:0] en_mem_data_in;
 logic [1:0] en_mem_data_out;
 logic en_mem_w_nr;
 logic hit1;
@@ -69,7 +68,6 @@ main_fsm dut(
     .clk,
     .en_grid_cords,
     .en_mem_addr,
-    .en_mem_data_in,
     .en_mem_data_out,
     .en_mem_w_nr,
     .hit1,
@@ -133,7 +131,7 @@ initial begin
 
     for(int ships_nr = 0; ships_nr < SHIPS_NUMBER; ships_nr++) begin
         $display("Ship nr: %d", ships_nr+1);
-        my_grid_cords = ships_nr;
+        my_grid_cords = 8'(ships_nr);
         #CLK1_PERIOD;
         my_grid_cords = 8'hff;
         list_outputs();
