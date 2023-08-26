@@ -27,7 +27,7 @@ module draw_rect_char
     vga_if.in in,
     vga_if.out out
 );
-    import vga_pkg::*;
+    import text_cfg_pkg::*;
 
     logic [3:0] char_line_delayed;
     logic [7:0] char_xy_nxt;

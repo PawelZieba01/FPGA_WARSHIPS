@@ -14,7 +14,7 @@ module char_rom_16x16 #( parameter
     input   logic [7:0] char_xy,    //[7:4] y, [3:0] x
     output  logic [6:0] char_code
 );
-    import vga_pkg::*;
+    import text_cfg_pkg::*;
     
     logic [3:0] x_pos;
     logic [3:0] y_pos;

@@ -19,7 +19,7 @@ module v_counter (
     output logic v_blank
 );
 
-    import vga_pkg::*;
+    import vga_cfg_pkg::*;
 
     logic [10:0] v_cnt_nxt;
     logic v_sync_nxt;

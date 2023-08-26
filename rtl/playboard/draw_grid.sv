@@ -11,11 +11,6 @@
 
  `timescale 1 ns / 1 ps
 
-localparam GRID_SIZE = 384;
-localparam GRID_BORDER_WIDTH = 2;
-
-
-
  module draw_grid #(parameter 
     X_POS = 0,
     Y_POS = 0
@@ -29,7 +24,7 @@ localparam GRID_BORDER_WIDTH = 2;
  );
  
  
- import vga_pkg::*;
+ import pb_cfg_pkg::*;
  
  
  /**

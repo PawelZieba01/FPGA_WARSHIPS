@@ -11,9 +11,9 @@
 
  `timescale 1 ns / 1 ps
 
-// localparam RECT_WIDTH = 48;
-// localparam RECT_HEIGHT = 64;
-// localparam RECT_COLOUR = 12'hf_0_0;
+localparam RECT_WIDTH = 48;
+localparam RECT_HEIGHT = 64;
+localparam RECT_COLOUR = 12'hf_0_0;
 
 localparam BOUNCE_COEFICIENT = 16'b0000_0000_0000_1011;      //1/2 + 1/4 + 1/8
 localparam ACCEL = 16'b0000_0000_0000_1100;                 //0.75

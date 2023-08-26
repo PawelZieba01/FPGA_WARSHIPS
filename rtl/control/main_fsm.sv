@@ -47,17 +47,11 @@ module main_fsm(
     output logic en_turn
 );
 
+import project_cfg_pkg::*;
 //------------------------------------------------------------------------------
 // local parameters
 //------------------------------------------------------------------------------
 localparam STATE_BITS = 4; // number of bits used for state register
-
-localparam SHIPS_NUMBER = 10; // number of ships to deploy on board
-
-localparam GRID_STATUS_EMPTY = 2'b00;
-localparam GRID_STATUS_MYSHIP = 2'b01;
-localparam GRID_STATUS_MISS = 2'b10;
-localparam GRID_STATUS_HIT = 2'b11;
 
 //------------------------------------------------------------------------------
 // local variables
@@ -295,7 +289,7 @@ always_comb begin : out_comb_blk
                     {win_nxt, lose_nxt} = {1'b0, 1'b1};
                 end
                 else begin              //shot or wait_for_shot state
-                    {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
+                    {ready1_nxt, hit1_nxt, ship_cords_out_nxt} = (en_grid_cords!=8'hff && ready2) ? {1'b1, 1'b1, en_grid_cords} : {1'b1, 1'b0, ship_cords_out};
                     {my_turn_nxt, en_turn_nxt} = {1'b1, 1'b0};
                 end
             end

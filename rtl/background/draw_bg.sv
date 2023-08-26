@@ -22,7 +22,9 @@ module draw_bg (
 );
 
 
-import vga_pkg::*;
+import vga_cfg_pkg::*;
+import bg_cfg_pkg::*;
+import project_cfg_pkg::*;
 
 
 /**
