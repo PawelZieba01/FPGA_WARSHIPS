@@ -4,6 +4,7 @@
  * Author: Paweł Zięba  
  * 
  * Description:
+ * Module for text drawing service.
  * 256 characters in rom.
  */
 

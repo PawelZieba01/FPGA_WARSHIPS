@@ -2,7 +2,7 @@
 # MTM UEC2
 # Author: Piotr Kaczmarczyk
 #
-#Modified by: Pawel Zieba
+# Modified by: Pawel Zieba
 #
 # Description:
 # List of files defining the modules used during the test.
@@ -11,7 +11,7 @@
 # https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
 
 
-sv work ../../rtl/board_mem.sv \
+sv work ../../rtl/playboard/board_mem.sv \
         board_mem_tb.sv 
 
         

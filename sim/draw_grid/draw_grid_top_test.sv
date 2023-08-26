@@ -1,7 +1,7 @@
 /**
  * AGH University of Science and Technology
  * 2023
- * Author: Pawel Zieba 
+ * Author: Natalia Kapuscinska 
  *
  * Description:
  * The draw_ships module test enviroment.

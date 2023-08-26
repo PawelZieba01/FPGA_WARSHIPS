@@ -7,7 +7,7 @@
  * 2023 Paweł Zięba  
  * 
  * Description:
- * Draw background.
+ * Draw background module.
  */
 
 
@@ -21,18 +21,15 @@ module draw_bg (
     vga_if.out out
 );
 
-
 import vga_cfg_pkg::*;
 import bg_cfg_pkg::*;
 import project_cfg_pkg::*;
-
 
 /**
  * Local variables and signals
  */
 
 logic [11:0] rgb_nxt;
-
 
 /**
  * Internal logic
@@ -59,17 +56,17 @@ always_ff @(posedge clk) begin : bg_ff_blk
 end
 
 always_comb begin : bg_comb_blk
-    if (in.vblnk || in.hblnk) begin                                                         // Blanking region:
-        rgb_nxt = 12'h0_0_0;                                                                // - make it it black.
-    end else begin                                                                          // Active region:
-        if (in.vcount >= 0 && in.vcount < BORDER_WIDTH)                                     // - top edge:
-            rgb_nxt = 12'hf_f_0;                                                            // - - make a yellow line.
-        else if ((in.vcount >= VER_PIXELS - BORDER_WIDTH-1) && (in.vcount < VER_PIXELS))      // - bottom edge:
-            rgb_nxt = 12'hf_0_0;                                                            // - - make a red line.
-        else if (in.hcount >= 0 && in.hcount < BORDER_WIDTH)                                // - left edge:
-            rgb_nxt = 12'h0_f_0;                                                            // - - make a green line.
-            else if ((in.hcount >= HOR_PIXELS - BORDER_WIDTH-1) && (in.hcount < HOR_PIXELS))  // - right edge:
-            rgb_nxt = 12'h0_0_f;                                                            // - - make a blue line.
+    if (in.vblnk || in.hblnk) begin                                                             // Blanking region:
+        rgb_nxt = 12'h0_0_0;                                                                    // - make it it black.
+    end else begin                                                                              // Active region:
+        if (in.vcount >= 0 && in.vcount < BORDER_WIDTH)                                         // - top edge:
+            rgb_nxt = 12'hf_f_0;                                                                // - - make a yellow line.
+        else if ((in.vcount >= VER_PIXELS - BORDER_WIDTH-1) && (in.vcount < VER_PIXELS))        // - bottom edge:
+            rgb_nxt = 12'hf_0_0;                                                                // - - make a red line.
+        else if (in.hcount >= 0 && in.hcount < BORDER_WIDTH)                                    // - left edge:
+            rgb_nxt = 12'h0_f_0;                                                                // - - make a green line.
+            else if ((in.hcount >= HOR_PIXELS - BORDER_WIDTH-1) && (in.hcount < HOR_PIXELS))    // - right edge:
+            rgb_nxt = 12'h0_0_f;                                                                // - - make a blue line.
         else                                            // The rest of active display pixels:
             rgb_nxt = BACKGROUND_COLOR;                 // - fill with gray.
     end

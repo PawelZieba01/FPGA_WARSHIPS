@@ -1,3 +1,12 @@
+ /**
+ * AGH University of Science and Technology
+ * 2023
+ * Author: Natalia Kapuscinska 
+ *
+ * Description:
+ * The draw_ships module to run test.
+ */
+ 
  `timescale 1 ns / 1 ps
 
  module draw_grid_tb;

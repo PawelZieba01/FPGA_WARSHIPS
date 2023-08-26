@@ -5,6 +5,9 @@
 //  - 128 (2^7) characters
 //  - ROM size: 512-by-8 (2^11-by-8) bits
 //              16K bits: 1 BRAM
+//
+// Author: unknown
+// Source: AGH University of Science and Technology - UEC2 LAB
 
 module font_rom
     (

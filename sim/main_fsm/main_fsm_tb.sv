@@ -86,7 +86,13 @@ main_fsm dut(
     .ship_cords_out,
     .start_btn,
     .my_ctr,
-    .en_ctr
+    .en_ctr,
+    .start_btn_en(),
+    .en_turn(),
+    .my_turn(),
+    .lose(),
+    .win(),
+    .state_out()
 );
 
 function void list_outputs();

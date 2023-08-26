@@ -3,9 +3,8 @@
  * MTM UEC2
  * Author: Pawel Zieba
  *
- *
  * Description:
- * Package with vga related constants.
+ * Package with confi parameters for background service.
  */
 
 package bg_cfg_pkg;

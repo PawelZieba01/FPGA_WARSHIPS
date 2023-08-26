@@ -1,4 +1,11 @@
-//module for debouncing
+/**
+* Module name: debounce
+* Author: unknown
+* Source: AGH University of Science and Technology - UEC2 LAB6 
+*
+* Description:
+* Module for debouncing signals.
+*/
 module debounce
    (
     input wire clk, reset,

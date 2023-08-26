@@ -8,6 +8,8 @@
  * MTM UEC2
  * Piotr Kaczmarczyk
  * 
+ * 2023  AGH University of Science and Technology
+ * MTM UEC2
  * 2023 Paweł Zięba  
  *
  * Description:

@@ -9,26 +9,29 @@
 # https://docs.xilinx.com/r/en-US/ug900-vivado-logic-simulation/Project-File-.prj-Syntax
 
 
-sv work ../../rtl/vga/vga_pkg.sv \
+sv work ../../rtl/vga/vga_cfg_pkg.sv \
+        ../../rtl/background/bg_cfg_pkg.sv \
+        ../../rtl/control/project_cfg_pkg.sv \
+        ../../rtl/playboard/pb_cfg_pkg.sv \
+        ../../rtl/rect_char/text_cfg_pkg.sv \
         ../../rtl/vga/vga_timing.sv \
-        ../../rtl/draw_bg.sv \
+        ../../rtl/background/draw_bg.sv \
         ../../rtl/top_warships.sv \
         ../../rtl/vga/h_counter.sv \
         ../../rtl/vga/v_counter.sv \
         ../../rtl/rect/draw_rect.sv \
         ../../rtl/mouse/draw_mouse.sv \
-        ../../rtl/rect/draw_rect_ctl.sv \
         ../../rtl/rect_char/draw_rect_char.sv \
         ../../rtl/rect_char/char_rom_16x16.sv \
         ../../rtl/vga/vga_if.sv \
         ../../rtl/rect/image_rom.sv \
-        ../../rtl/common/simple_clk_div.sv \
         ../common/tiff_writer.sv \
-        ../../rtl/draw_ships.sv \
-        ../../rtl/board_mem.sv \
-        ../../rtl/draw_grid.sv \
-        ../../rtl/main_fsm.sv \
-        ../../rtl/player_ctrl.sv \
+        ../../rtl/playboard/draw_ships.sv \
+        ../../rtl/playboard/board_mem.sv \
+        ../../rtl/playboard/draw_grid.sv \
+        ../../rtl/control/main_fsm.sv \
+        ../../rtl/control/player_ctrl.sv \
+        ../../rtl/control/disp_hex_mux.sv \
         top_warships_tb.sv
 
 vhdl work ../../rtl/mouse/MouseCtl.vhd \

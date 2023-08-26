@@ -7,9 +7,13 @@
  * 2023  AGH University of Science and Technology
  * MTM UEC2
  * Piotr Kaczmarczyk
+ * 
+ * 2023  AGH University of Science and Technology
+ * MTM UEC2
+ * Pawel Zieba
  *
  * Description:
- * Testbench for top_vga.
+ * Testbench for top_warships.
  * Thanks to the tiff_writer module, an expected image
  * produced by the project is exported to a tif file.
  * Since the vs signal is connected to the go input of
@@ -70,7 +74,19 @@ top_warships dut (
     .hs(hs),
     .r(r),
     .g(g),
-    .b(b)
+    .b(b),
+    .an(),
+    .control_clk(),
+    .hit1(),
+    .hit2(),
+    .led(),
+    .ps2_clk(),
+    .ps2_data(),
+    .ready1(),
+    .ready2(),
+    .ship_cords_in(),
+    .ship_cords_out(),
+    .sseg()
 );
 
 tiff_writer #(
