@@ -12,8 +12,6 @@ xvlog.pb
 xsim.dir
 .dvt
 results
-*.odt
-*.tmp
 
 
 *.log
