@@ -43,6 +43,7 @@ module top_warships (
      * Local variables and signals
      */
 
+
     //mouse signals
     logic [11:0] mouse_x_pos, mouse_y_pos;
     logic mouse_left, mouse_left_db;
@@ -51,8 +52,17 @@ module top_warships (
     //start button signals
     logic [11:0] rgb_pixel_start_btn;
     logic [13:0] rgb_pixel_addr_start_btn;
+    logic [11:0] rgb_pixel_enemy_turn;
+    logic [13:0] rgb_pixel_addr_enemy_turn;
+    logic [11:0] rgb_pixel_my_turn;
+    logic [13:0] rgb_pixel_addr_my_turn;
+    logic [11:0] rgb_pixel_win;
+    logic [13:0] rgb_pixel_addr_win;
+    logic [11:0] rgb_pixel_lose;
+    logic [13:0] rgb_pixel_addr_lose;
     logic  start_btn;
     logic  start_btn_en;
+    logic en_en, win_en, my_en, lose_en;
 
   
     //my board memory and draw ships signals
@@ -121,6 +131,10 @@ module top_warships (
     vga_if text_my_ships_if();
     vga_if text_e_ships_if();
     vga_if mouse_if();
+    vga_if win_if();
+    vga_if lose_if();
+    vga_if my_turn_if();
+    vga_if en_turn_if();
 
 
     /**
@@ -166,10 +180,10 @@ module top_warships (
 
         .state_out(state_fsm),
 
-        .en_turn(),
-        .my_turn(),
-        .lose(),
-        .win()
+        .en_turn(en_en),
+        .my_turn(my_en),
+        .lose(lose_en),
+        .win(win_en)
     );
 
     //----------------------------------------PLAYER CONTROL--------------------------------------------
@@ -219,12 +233,110 @@ module top_warships (
         .pixel_addr(rgb_pixel_addr_start_btn)
     );
     
-    image_rom #(.IMG_DATA_PATH("../../rtl/rect/start_btn_png.dat"))
+    image_rom #(.IMG_DATA_PATH("../../rtl/rect/start.dat"))
     u_image_rom_btn_start(
         .clk(vga_clk),
         .address(rgb_pixel_addr_start_btn),
         .rgb(rgb_pixel_start_btn)
-    );    
+    );
+     //--------------------------------------PLAYER TURN POINTER-----------------------------------------
+    draw_rect 
+    #(  .RECT_HEIGHT(64),
+        .RECT_WIDTH(64)
+    )
+    u_draw_my_turn(
+        .clk(vga_clk),
+        .rst,
+        .enable(my_en),
+        .x_pos(12'(261)),
+        .y_pos(12'(116)),
+        .in(start_btn_if),
+        .out(my_turn_if),
+
+        .rgb_pixel(rgb_pixel_my_turn),
+        .pixel_addr(rgb_pixel_addr_my_turn)
+    );
+    
+    image_rom #(.IMG_DATA_PATH("../../rtl/rect/my_turn.dat"))
+    u_image_rom_my_turn(
+        .clk(vga_clk),
+        .address(rgb_pixel_addr_my_turn),
+        .rgb(rgb_pixel_my_turn)
+    );
+
+        //--------------------------------------ENEMY TURN POINTER----------------------------------------
+    draw_rect 
+    #(  .RECT_HEIGHT(64),
+        .RECT_WIDTH(64)
+    )
+    u_draw_enemy_turn(
+        .clk(vga_clk),
+        .rst,
+        .enable(en_en),
+        .x_pos(12'(858)),
+        .y_pos(12'(116)),
+        .in(my_turn_if),
+        .out(en_turn_if),
+
+        .rgb_pixel(rgb_pixel_enemy_turn),
+        .pixel_addr(rgb_pixel_addr_enemy_turn)
+    );
+    
+    image_rom #(.IMG_DATA_PATH("../../rtl/rect/en_turn.dat"))
+    u_image_rom_enemy_turn(
+        .clk(vga_clk),
+        .address(rgb_pixel_addr_enemy_turn),
+        .rgb(rgb_pixel_enemy_turn)
+    );  
+  
+        //-------------------------------------FAILED INFO----------------------------------------
+    draw_rect 
+    #(  .RECT_HEIGHT(SBtn_HEIGHT),
+        .RECT_WIDTH(SBtn_WIDITH)
+    )
+    u_draw_lose(
+        .clk(vga_clk),
+        .rst,
+        .enable(lose_en),
+        .x_pos(12'(448)),
+        .y_pos(12'(310)),
+        .in(en_turn_if),
+        .out(lose_if),
+
+        .rgb_pixel(rgb_pixel_lose),
+        .pixel_addr(rgb_pixel_addr_lose)
+    );
+    
+    image_rom #(.IMG_DATA_PATH("../../rtl/rect/lose.dat"))
+    u_image_rom_lose(
+        .clk(vga_clk),
+        .address(rgb_pixel_addr_lose),
+        .rgb(rgb_pixel_lose)
+    );  
+       //--------------------------------------WIN INFO----------------------------------------
+    draw_rect 
+    #(  .RECT_HEIGHT(SBtn_HEIGHT),
+        .RECT_WIDTH(SBtn_WIDITH)
+    )
+    u_draw_win(
+        .clk(vga_clk),
+        .rst,
+        .enable(win_en),
+        .x_pos(12'(448)),
+        .y_pos(12'(310)),
+        .in(lose_if),
+        .out(win_if),
+
+        .rgb_pixel(rgb_pixel_win),
+        .pixel_addr(rgb_pixel_addr_win)
+    );
+    
+    image_rom #(.IMG_DATA_PATH("../../rtl/rect/win.dat"))
+    u_image_rom_win(
+        .clk(vga_clk),
+        .address(rgb_pixel_addr_win),
+        .rgb(rgb_pixel_win)
+    ); 
 
     //-----------------------------------------MY_SHIPS----------------------------------------------
     draw_grid #(
@@ -234,7 +346,7 @@ module top_warships (
     u_draw_my_grid(
         .clk(vga_clk),
         .rst,
-        .in(start_btn_if),
+        .in(win_if),
         .out(my_grid_if)
     );
 
