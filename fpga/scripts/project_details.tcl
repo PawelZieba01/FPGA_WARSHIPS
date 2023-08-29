@@ -91,5 +91,9 @@ set vhdl_files {
 # Specify files for a memory initialization     -- EDIT
 set mem_files {
    ../rtl/rect/image_rom.data
-   ../rtl/rect/start_btn_png.dat
+   ../rtl/rect/start.dat
+   ../rtl/rect/win.dat
+   ../rtl/rect/lose.dat
+   ../rtl/rect/my_turn.dat
+   ../rtl/rect/en_turn.dat
 }

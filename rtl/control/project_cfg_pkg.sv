@@ -26,5 +26,14 @@ package project_cfg_pkg;
     localparam PLAYER_POS = 100;
     localparam ENEMY_POS = 538;
     localparam GRID_YPOS = 200;
+    localparam MY_TURN_PNG_XPOS = 749;
+    localparam MY_TURN_PNG_YPOS = 116;
+    localparam EN_TURN_PNG_XPOS = 261;
+    localparam EN_TURN_PNG_YPOS = 116;
+    localparam WIN_INFO_PNG_XPOS = 448;
+    localparam WIN_INFO_PNG_YPOS = 40;
+    localparam FAIL_INFO_PNG_XPOS = 448;
+    localparam FAIL_INFO_PNG_YPOS = 40;
+
 
 endpackage

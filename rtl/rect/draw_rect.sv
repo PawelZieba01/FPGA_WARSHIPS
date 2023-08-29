@@ -116,7 +116,12 @@ module draw_rect #( parameter
              (vcount_nxt2 >= y_pos_sync)                   &&
              (vcount_nxt2 < y_pos_sync + RECT_HEIGHT)      &&
              (enable == 1'b1))     begin : rect_area_blk
-                rgb_out_nxt = rgb_pixel;
+                if(rgb_pixel == 12'h0f0)begin
+                    rgb_out_nxt = rgb_nxt2;
+                end
+                else begin
+                    rgb_out_nxt = rgb_pixel;
+                end
             end
             else begin
                 rgb_out_nxt = rgb_nxt2;
