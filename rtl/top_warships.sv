@@ -105,12 +105,12 @@ module top_warships (
 
   
     //led debug
-    assign led[3:0] = state_fsm;
-    assign led[11:4] = 8'(my_ctr);
-    assign led[15] = start_btn_en;
-    assign led[14] = start_btn;
-    assign led[13] = mouse_left;
-    assign led[12] = ready2;
+    // assign led[3:0] = state_fsm;
+    // assign led[11:4] = 8'(my_ctr);
+    // assign led[15] = start_btn_en;
+    // assign led[14] = start_btn;
+    // assign led[13] = mouse_left;
+    assign led = '0;
   
   
     //7seg display signals
@@ -248,8 +248,8 @@ module top_warships (
         .clk(vga_clk),
         .rst,
         .enable(my_en),
-        .x_pos(12'(261)),
-        .y_pos(12'(116)),
+        .x_pos(12'(MY_TURN_PNG_XPOS)),
+        .y_pos(12'(MY_TURN_PNG_YPOS)),
         .in(start_btn_if),
         .out(my_turn_if),
 
@@ -273,8 +273,8 @@ module top_warships (
         .clk(vga_clk),
         .rst,
         .enable(en_en),
-        .x_pos(12'(858)),
-        .y_pos(12'(116)),
+        .x_pos(12'(EN_TURN_PNG_XPOS)),
+        .y_pos(12'(EN_TURN_PNG_YPOS)),
         .in(my_turn_if),
         .out(en_turn_if),
 
@@ -291,15 +291,15 @@ module top_warships (
   
         //-------------------------------------FAILED INFO----------------------------------------
     draw_rect 
-    #(  .RECT_HEIGHT(SBtn_HEIGHT),
-        .RECT_WIDTH(SBtn_WIDITH)
+    #(  .RECT_HEIGHT(128),
+        .RECT_WIDTH(128)
     )
     u_draw_lose(
         .clk(vga_clk),
         .rst,
         .enable(lose_en),
-        .x_pos(12'(448)),
-        .y_pos(12'(310)),
+        .x_pos(12'(FAIL_INFO_PNG_XPOS)),
+        .y_pos(12'(FAIL_INFO_PNG_YPOS)),
         .in(en_turn_if),
         .out(lose_if),
 
@@ -315,15 +315,15 @@ module top_warships (
     );  
        //--------------------------------------WIN INFO----------------------------------------
     draw_rect 
-    #(  .RECT_HEIGHT(SBtn_HEIGHT),
-        .RECT_WIDTH(SBtn_WIDITH)
+    #(  .RECT_HEIGHT(128),
+        .RECT_WIDTH(128)
     )
     u_draw_win(
         .clk(vga_clk),
         .rst,
         .enable(win_en),
-        .x_pos(12'(448)),
-        .y_pos(12'(310)),
+        .x_pos(12'(WIN_INFO_PNG_XPOS)),
+        .y_pos(12'(WIN_INFO_PNG_YPOS)),
         .in(lose_if),
         .out(win_if),
 
